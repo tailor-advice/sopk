@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Mode de Vie & SOPK</title>
+    <style>
+        :root {
+            --primary: #4a7c59; /* Vert sauge */
+            --primary-light: #e8f3eb;
+            --accent: #d4a373; /* Terre */
+            --text: #333;
+            --bg: #fdfbf7;
+            --white: #ffffff;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        #app-container {
+            width: 100%;
+            max-width: 600px; /* Format mobile/tablette idéal */
+            background: var(--white);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        /* HEADER */
+        header {
+            padding: 20px;
+            text-align: center;
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* CONTENT AREA */
+        .content {
+            flex: 1;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* INTRO SCREEN */
+        .intro-screen {
+            text-align: center;
+        }
+        .intro-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        /* QUIZ SCREEN */
+        .question-card {
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #eee;
+            height: 6px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .category-tag {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        h2.question-text {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            line-height: 1.4;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: var(--white);
+            border: 2px solid #eee;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* RESULTS SCREEN */
+        .result-screen {
+            animation: slideUp 0.5s ease;
+        }
+
+        .score-card {
+            background: var(--primary-light);
+            padding: 20px;
+            border-radius: var(--radius);
+            text-align: center;
+            margin-bottom: 25px;
+            border: 1px solid var(--primary);
+        }
+
+        .profile-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .advice-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--accent);
+        }
+
+        .advice-section h3 {
+            margin-top: 0;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .advice-list {
+            padding-left: 20px;
+            margin-bottom: 0;
+        }
+        .advice-list li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+
+        /* BUTTONS */
+        .cta-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 0 4px 10px rgba(74, 124, 89, 0.3);
+        }
+
+        /* UTILS */
+        .hidden { display: none !important; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (min-width: 600px) {
+            #app-container {
+                margin: 20px;
+                border-radius: 20px;
+                min-height: auto;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app-container">
+    <header>
+        <h1>🌸 Audit SOPK & Bien-être</h1>
+    </header>
+
+    <div class="content">
+        
+        <div id="intro" class="intro-screen">
+            <span class="intro-icon">📋</span>
+            <h2>Ton hygiène de vie est-elle adaptée à tes hormones ?</h2>
+            <p style="color: #666; line-height: 1.6; margin-bottom: 30px;">
+                Le SOPK réagit fortement à l'alimentation, au stress et au sommeil. Ce petit questionnaire de 8 questions va analyser tes habitudes pour te donner un plan d'action personnalisé.
+            </p>
+            <button class="cta-btn" onclick="startQuiz()">Commencer l'audit</button>
+        </div>
+
+        <div id="quiz" class="hidden">
+            <div class="progress-container">
+                <div id="progress-bar" class="progress-bar"></div>
+            </div>
+            
+            <div id="question-container" class="question-card">
+                <span id="category-badge" class="category-tag">Nutrition</span>
+                <h2 id="question-text" class="question-text">Question ici...</h2>
+                <div id="options-container" class="options-list">
+                    </div>
+            </div>
+        </div>
+
+        <div id="result" class="result-screen hidden">
+            <div class="score-card">
+                <div>Ton profil dominant :</div>
+                <div id="profile-name" class="profile-title">Titre du Profil</div>
+                <p id="profile-desc" style="font-size: 0.9rem; margin-top:10px;">Description courte...</p>
+            </div>
+
+            <div id="detailed-feedback">
+                </div>
+
+            <button class="cta-btn" onclick="location.reload()">Refaire le test</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // --- DONNÉES DU QUIZ ---
+    const questions = [
+        {
+            category: "Nutrition & Glycémie",
+            text: "À quoi ressemble ton petit-déjeuner type ?",
+            options: [
+                { text: "Salé (œufs, avocat, fromage) ou jeûne.", value: "A" },
+                { text: "Mixte (tartines, fruit, café).", value: "B" },
+                { text: "Sucré (céréales, jus, confiture).", value: "C" }
+            ]
+        },
+        {
+            category: "Nutrition & Glycémie",
+            text: "Comment te sens-tu 2h après le déjeuner ?",
+            options: [
+                { text: "En forme, énergie stable.", value: "A" },
+                { text: "Léger coup de mou.", value: "B" },
+                { text: "Grosse fatigue, besoin de sucre.", value: "C" }
+            ]
+        },
+        {
+            category: "Nutrition & Glycémie",
+            text: "As-tu des fringales incontrôlables ?",
+            options: [
+                { text: "Rarement.", value: "A" },
+                { text: "Parfois (avant les règles).", value: "B" },
+                { text: "Souvent (surtout le soir).", value: "C" }
+            ]
+        },
+        {
+            category: "Mouvement & Stress",
+            text: "Ton activité physique principale ?",
+            options: [
+                { text: "Muscu, Pilates, Marche.", value: "A" },
+                { text: "Irrégulier.", value: "B" },
+                { text: "Cardio intense ou sédentaire.", value: "C" }
+            ]
+        },
+        {
+            category: "Mouvement & Stress",
+            text: "Ton niveau de stress ressenti ?",
+            options: [
+                { text: "Géré, je me relaxe.", value: "A" },
+                { text: "Stressée mais je dors.", value: "B" },
+                { text: "Anxiété constante / Épuisement.", value: "C" }
+            ]
+        },
+        {
+            category: "Mouvement & Stress",
+            text: "Marches-tu au quotidien ?",
+            options: [
+                { text: "Oui, > 7000 pas ou après repas.", value: "A" },
+                { text: "Juste pour les déplacements.", value: "B" },
+                { text: "Très peu, surtout assise.", value: "C" }
+            ]
+        },
+        {
+            category: "Signaux du Corps",
+            text: "Où stockes-tu le poids principalement ?",
+            options: [
+                { text: "Réparti ou pas de surpoids.", value: "A" },
+                { text: "Hanches / Cuisses.", value: "B" },
+                { text: "Ventre / Abdomen.", value: "C" }
+            ]
+        },
+        {
+            category: "Signaux du Corps",
+            text: "Qualité de ton sommeil ?",
+            options: [
+                { text: "Profond et réparateur.", value: "A" },
+                { text: "Réveils nocturnes.", value: "B" },
+                { text: "Difficile ou non réparateur.", value: "C" }
+            ]
+        }
+    ];
+
+    // --- ÉTAT DE L'APPLICATION ---
+    let currentQuestion = 0;
+    let answers = [];
+
+    // --- FONCTIONS LOGIQUES ---
+
+    function startQuiz() {
+        document.getElementById('intro').classList.add('hidden');
+        document.getElementById('quiz').classList.remove('hidden');
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const q = questions[currentQuestion];
+        
+        // Mise à jour UI
+        document.getElementById('category-badge').innerText = q.category;
+        document.getElementById('question-text').innerText = q.text;
+        
+        // Barre de progression
+        const progress = ((currentQuestion) / questions.length) * 100;
+        document.getElementById('progress-bar').style.width = progress + "%";
+
+        // Génération des options
+        const container = document.getElementById('options-container');
+        container.innerHTML = ''; // Clear previous
+
+        q.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt.text;
+            btn.onclick = () => selectAnswer(opt.value);
+            container.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(val) {
+        answers.push(val);
+        
+        if (currentQuestion < questions.length - 1) {
+            currentQuestion++;
+            showQuestion();
+        } else {
+            finishQuiz();
+        }
+    }
+
+    function finishQuiz() {
+        document.getElementById('quiz').classList.add('hidden');
+        document.getElementById('result').classList.remove('hidden');
+        calculateResult();
+    }
+
+    function calculateResult() {
+        const counts = { A: 0, B: 0, C: 0 };
+        answers.forEach(a => counts[a]++);
+
+        // Logique de détermination du profil
+        let profile = "";
+        if (counts.A >= counts.B && counts.A >= counts.C) profile = "A";
+        else if (counts.B >= counts.A && counts.B >= counts.C) profile = "B";
+        else profile = "C";
+
+        // Cas d'égalité (priorité au risque le plus élevé pour la prévention)
+        if (counts.C === counts.B && counts.C > counts.A) profile = "C";
+        
+        renderFeedback(profile, counts);
+    }
+
+    function renderFeedback(profile, counts) {
+        const titleEl = document.getElementById('profile-name');
+        const descEl = document.getElementById('profile-desc');
+        const detailsEl = document.getElementById('detailed-feedback');
+
+        let data = {};
+
+        if (profile === "A") {
+            data = {
+                title: "🟢 La Maîtrise Hormonale",
+                desc: "Ton mode de vie est un allié puissant pour tes ovaires.",
+                content: `
+                    <div class="advice-section">
+                        <h3>Ce que tu fais bien :</h3>
+                        <p>Bravo ! Tes réponses indiquent une glycémie stable et une bonne gestion du stress. C'est la clé pour mettre le SOPK "en sommeil".</p>
+                    </div>
+                    <div class="advice-section">
+                        <h3>Pistes d'amélioration :</h3>
+                        <ul class="advice-list">
+                            <li>Si des symptômes persistent, vérifie tes taux de Vitamine D et Zinc.</li>
+                            <li>Maintiens tes efforts sur la musculation douce.</li>
+                            <li>Attention aux perturbateurs endocriniens (plastiques, cosmétiques).</li>
+                        </ul>
+                    </div>
+                `
+            };
+        } else if (profile === "B") {
+            data = {
+                title: "🟠 En Transition",
+                desc: "Tu es sur la bonne voie, mais quelques ajustements feront toute la différence.",
+                content: `
+                    <div class="advice-section">
+                        <h3>Analyse :</h3>
+                        <p>Tu fais des efforts, mais des pics d'insuline ou de cortisol perturbent encore tes résultats. C'est frustrant, mais facile à corriger.</p>
+                    </div>
+                    <div class="advice-section">
+                        <h3>Ton Plan d'Action Prioritaire :</h3>
+                        <ul class="advice-list">
+                            <li><strong>Le Petit-Dèj :</strong> Passe impérativement au SALÉ (œufs, fromage) pour supprimer les fringales de 11h et 16h.</li>
+                            <li><strong>Marche :</strong> Ajoute 10 min de marche après le déjeuner.</li>
+                            <li><strong>Stress :</strong> Intègre 5 min de cohérence cardiaque le soir.</li>
+                        </ul>
+                    </div>
+                `
+            };
+        } else {
+            data = {
+                title: "🔴 Le Cercle Inflammatoire",
+                desc: "Ton corps est en alerte. Tes symptômes sont nourris par ton mode de vie actuel.",
+                content: `
+                    <div class="advice-section">
+                        <h3>Analyse :</h3>
+                        <p>Ne culpabilise pas. Ton insuline est probablement élevée, ce qui cause cette fatigue chronique et ce stockage abdominal.</p>
+                    </div>
+                    <div class="advice-section">
+                        <h3>Tes 3 premiers pas (Douceur) :</h3>
+                        <ul class="advice-list">
+                            <li><strong>Ordre des aliments :</strong> Mange tes légumes/fibres EN PREMIER à chaque repas. C'est tout.</li>
+                            <li><strong>Stop au Cardio violent :</strong> Arrête de t'épuiser. Marche simplement 20 min par jour.</li>
+                            <li><strong>Vinaigre de cidre :</strong> 1 c.à.s dans de l'eau avant le repas le plus riche pour couper le pic de sucre.</li>
+                        </ul>
+                    </div>
+                `
+            };
+        }
+
+        titleEl.innerText = data.title;
+        descEl.innerText = data.desc;
+        detailsEl.innerHTML = data.content;
+    }
+</script>
+
+</body>
+</html>
