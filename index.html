@@ -121,6 +121,14 @@
             font-size: 0.95rem; padding: 15px;
         }
         .btn-alert:hover { background: var(--alert-bg); }
+        
+        /* Bouton TikTok Spécifique */
+        .btn-tiktok {
+            background: #000000; color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0, 0.2);
+        }
+        .btn-tiktok:hover { transform: translateY(-2px); background: #222; }
+
 
         /* ELEMENTS */
         .intro-illustration {
@@ -140,7 +148,6 @@
         .info-list li { margin-bottom: 10px; padding-left: 10px; position: relative; }
         .info-list li::before { content: "•"; color: var(--primary); position: absolute; left: -10px; font-weight: bold; }
 
-        /* TABAC PAGE SPECIFIC */
         .warning-box {
             background: var(--alert-bg); border-left: 4px solid var(--alert-text);
             color: #8a3b3b; padding: 20px; border-radius: 16px; margin-bottom: 20px;
@@ -160,6 +167,37 @@
         }
         .challenge-text h4 { margin: 0 0 5px 0; color: #333; font-size: 1rem; }
         .challenge-text p { margin: 0; font-size: 0.9rem; color: #666; line-height: 1.5; }
+
+        /* --- STYLES POUR LA CARTE DE PARTAGE (Social Share) --- */
+        #share-card-visual {
+            background: linear-gradient(145deg, var(--primary) 0%, #d68fa5 100%);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 10px 30px rgba(176, 109, 133, 0.4);
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        /* Effet "Grain" ou texture */
+        #share-card-visual::before {
+            content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
+            background: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent 70%);
+        }
+
+        .share-title { font-family: 'Playfair Display'; font-size: 1.8rem; margin: 0 0 5px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .share-subtitle { font-family: 'Outfit'; font-weight: 600; font-size: 0.9rem; letter-spacing: 2px; opacity: 0.9; margin-bottom: 25px; display:block; }
+        
+        .share-steps-container { background: rgba(255,255,255,0.15); border-radius: 15px; padding: 15px; backdrop-filter: blur(5px); text-align: left; }
+        .share-step-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.95rem; }
+        .share-step-item:last-child { margin-bottom: 0; }
+        .share-step-item i { background: white; color: var(--primary); padding: 5px; border-radius: 50%; font-size: 0.8rem; }
+        
+        .share-footer { margin-top: 20px; font-size: 0.8rem; opacity: 0.8; font-weight: 300; }
+
 
         /* QUIZ & RESULT */
         .progress-track { background: #f0f0f0; height: 6px; border-radius: 10px; margin-bottom: 25px; }
@@ -220,38 +258,31 @@
             <button class="btn-base btn-outline" onclick="hideInfoPage()" style="padding: 10px; width: auto; font-size: 0.9rem; border:none;">
                 <i class="ph ph-arrow-left"></i> Retour
             </button>
-            
             <div class="info-section">
                 <h3><i class="ph ph-flower-lotus"></i> Qu'est-ce que le SOPK ?</h3>
-                <div class="info-box">
-                    Le Syndrome des Ovaires Polykystiques touche 1 femme sur 10. Ce n'est pas une maladie des ovaires, mais un <strong>déséquilibre hormonal</strong> (souvent lié à l'insuline) qui perturbe la communication entre le cerveau et les ovaires.
-                </div>
+                <div class="info-box">Le Syndrome des Ovaires Polykystiques touche 1 femme sur 10. C'est un <strong>déséquilibre hormonal</strong> (souvent lié à l'insuline) qui perturbe la communication entre le cerveau et les ovaires.</div>
             </div>
-
             <div class="info-section">
                 <h3><i class="ph ph-activity"></i> Effets sur le corps</h3>
                 <div class="info-box" style="border-color: var(--gold);">
                     <ul class="info-list" style="margin:0; padding-left:15px;">
-                        <li><strong>Cycles :</strong> Règles irrégulières, absentes ou très longues.</li>
-                        <li><strong>Physique :</strong> Acné, pilosité excessive (hirsutisme) ou chute de cheveux.</li>
-                        <li><strong>Métabolisme :</strong> Prise de poids facile (surtout ventre), fatigue chronique, fringales.</li>
+                        <li>Cycles irréguliers ou absents.</li>
+                        <li>Acné, pilosité excessive ou chute de cheveux.</li>
+                        <li>Prise de poids (ventre), fatigue chronique.</li>
                     </ul>
                 </div>
             </div>
-
             <div class="info-section">
                 <h3><i class="ph ph-sparkle"></i> Les Clés du Mieux-Être</h3>
                 <div class="info-box" style="border-color: var(--primary); background: var(--primary-light);">
-                    <p style="margin-top:0;">On ne guérit pas le SOPK, mais on peut "endormir" les symptômes :</p>
                     <ul class="info-list" style="margin:0; padding-left:15px;">
                         <li><strong>Nutrition :</strong> Petit-déjeuner salé & Légumes en premier.</li>
-                        <li><strong>Mouvement :</strong> Activité régulière mais douce (évitez le cardio épuisant).</li>
-                        <li><strong>Mental :</strong> Réduire le stress (cortisol) est aussi important que manger sainement.</li>
+                        <li><strong>Mouvement :</strong> Activité régulière mais douce.</li>
+                        <li><strong>Mental :</strong> Réduire le stress (cortisol).</li>
                     </ul>
                 </div>
             </div>
-
-             <button class="btn-base btn-primary" onclick="startQuiz()">Faire le test maintenant</button>
+            <button class="btn-base btn-primary" onclick="startQuiz()">Faire le test maintenant</button>
         </div>
 
         <div id="quiz-screen" class="hidden">
@@ -293,40 +324,59 @@
                 <p id="chal-intro" style="margin:0; text-align:center; font-style:italic;">Intro challenge...</p>
             </div>
             <div id="chal-steps"></div>
-            <button class="btn-base btn-primary" onclick="alert('Challenge accepté ! Prends une capture d\'écran ✨')"><i class="ph ph-check-circle"></i> J'accepte le Challenge</button>
+            
+            <button class="btn-base btn-primary" onclick="showShareScreen()">
+                <i class="ph ph-check-circle"></i> J'accepte le Challenge
+            </button>
+            
             <button class="btn-base btn-outline" onclick="backToResult()"><i class="ph ph-arrow-left"></i> Retour</button>
+        </div>
+
+        <div id="share-screen" class="hidden fade-in">
+            <div style="text-align:center; margin-bottom:15px;">
+                <h2 style="font-family: 'Playfair Display'; color: var(--primary); margin:0;">C'est parti !</h2>
+                <p style="color: var(--text-light); font-size:0.9rem;">Capture cette carte pour te motiver</p>
+            </div>
+
+            <div id="share-card-visual">
+                <span class="share-subtitle">MON COCON SOPK</span>
+                <h3 class="share-title" id="share-card-title">Titre Challenge</h3>
+                
+                <div class="share-steps-container" id="share-card-steps">
+                    </div>
+                
+                <div class="share-footer">@moncoconsopk #SOPKChallenge</div>
+            </div>
+
+            <button class="btn-base btn-tiktok" onclick="openTikTok()">
+                <i class="ph ph-tiktok-logo" style="font-size:1.3rem;"></i> Partager sur TikTok
+            </button>
+
+            <button class="btn-base btn-outline" onclick="hideShareScreen()" style="border:none; font-size:0.9rem;">
+                Fermer
+            </button>
         </div>
 
         <div id="substance-screen" class="hidden fade-in">
             <button class="btn-base btn-outline" onclick="hideSubstancePage()" style="padding: 10px; width: auto; font-size: 0.9rem; border:none;">
-                <i class="ph ph-arrow-left"></i> Retour aux résultats
+                <i class="ph ph-arrow-left"></i> Retour
             </button>
             
             <h2 style="font-family: 'Playfair Display'; color: var(--primary); margin-bottom: 10px;">Tabac, Cannabis & SOPK</h2>
-            <p style="color: var(--text-light); font-size:0.9rem; margin-bottom:25px;">
-                Information sans jugement. Comprendre l'impact de ces substances est une clé puissante pour reprendre le contrôle de vos symptômes.
-            </p>
-
             <div class="warning-box">
                 <div class="warning-title"><i class="ph ph-cigarette-slash" style="font-size:1.4rem;"></i> Le Tabac</div>
                 <ul class="info-list" style="margin:0; padding-left:15px; font-size:0.95rem;">
-                    <li><strong>Explosion des Androgènes :</strong> La nicotine stimule directement les surrénales, augmentant la production d'hormones mâles (poils, acné).</li>
-                    <li><strong>Insuline :</strong> Fumer double le risque de résistance à l'insuline, rendant la perte de poids difficile.</li>
-                    <li><strong>Cœur :</strong> Le SOPK fragilise déjà le système cardiovasculaire, le tabac multiplie ce risque.</li>
+                    <li><strong>Androgènes :</strong> La nicotine augmente les hormones mâles (acné, poils).</li>
+                    <li><strong>Insuline :</strong> Fumer double le risque de résistance à l'insuline.</li>
+                    <li><strong>Cœur :</strong> Le SOPK fragilise déjà le cœur, le tabac aggrave le risque.</li>
                 </ul>
             </div>
-
             <div class="info-box" style="border-left-color: var(--gold);">
                 <div class="warning-title" style="color:var(--text-main);"><i class="ph ph-plant" style="font-size:1.4rem; color:var(--gold);"></i> Le Cannabis</div>
                 <ul class="info-list" style="margin:0; padding-left:15px; font-size:0.95rem;">
-                    <li><strong>Cycle Bloqué :</strong> Le THC agit sur le cerveau et peut bloquer l'ovulation, déréglant totalement les règles.</li>
-                    <li><strong>Prolactine & Cortisol :</strong> Une consommation régulière augmente le stress (cortisol) et perturbe la fertilité.</li>
-                    <li><strong>Fringales :</strong> Les envies de sucre provoquées par le cannabis créent des pics d'insuline nocifs pour le SOPK.</li>
+                    <li><strong>Cycle Bloqué :</strong> Le THC peut bloquer l'ovulation.</li>
+                    <li><strong>Fringales :</strong> Provoque des pics d'insuline nocifs.</li>
                 </ul>
-            </div>
-
-            <div class="info-box" style="background:var(--sage-light); border:none;">
-                <strong>💡 Le Conseil :</strong> Réduire la consommation a un impact positif visible sur l'acné et le cycle en seulement 3 mois.
             </div>
         </div>
 
@@ -334,7 +384,7 @@
 </div>
 
 <script>
-    // --- IMAGES SÉCURISÉES ---
+    // --- IMAGES ---
     const images = {
         intro: 'https://images.unsplash.com/photo-1544367563-12123d8965cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         info: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
@@ -357,6 +407,9 @@
 
     const hero = document.getElementById('hero-img');
     hero.style.backgroundImage = `url('${images.intro}')`;
+
+    // --- VARIABLES GLOBALES ---
+    let currentProfile = 'C';
 
     // --- NAVIGATION ---
     function showInfoPage() {
@@ -390,6 +443,33 @@
         document.getElementById('result-screen').classList.remove('hidden');
         hero.style.backgroundImage = `url('${images.resultHeader}')`;
         document.getElementById('header-title').innerText = "Tes Résultats";
+    }
+
+    // --- PARTAGE SOCIAL (Nouveau) ---
+    function showShareScreen() {
+        // Préparer la carte
+        const data = challengesData[currentProfile];
+        document.getElementById('share-card-title').innerText = data.title;
+        const stepsContainer = document.getElementById('share-card-steps');
+        stepsContainer.innerHTML = '';
+        data.steps.forEach(step => {
+            stepsContainer.innerHTML += `<div class="share-step-item"><i class="ph ${step.icon}"></i> <span>${step.title}</span></div>`;
+        });
+
+        document.getElementById('challenge-screen').classList.add('hidden');
+        document.getElementById('share-screen').classList.remove('hidden');
+        hero.style.height = "0px"; // On cache le header pour focus sur la carte
+    }
+
+    function hideShareScreen() {
+        document.getElementById('share-screen').classList.add('hidden');
+        document.getElementById('challenge-screen').classList.remove('hidden');
+        hero.style.height = "160px";
+    }
+
+    function openTikTok() {
+        // Ouvre TikTok (ou le site si pas d'app)
+        window.open('https://www.tiktok.com/', '_blank');
     }
 
     // --- QUIZ LOGIC ---
@@ -430,6 +510,7 @@
         document.getElementById('result-screen').classList.remove('hidden');
         hero.style.height = "140px"; hero.style.backgroundImage = `url('${images.resultHeader}')`; document.getElementById('header-title').innerText = "Tes Résultats";
         let p = 'C'; if (answers.A >= answers.B && answers.A >= answers.C) p = 'A'; else if (answers.B >= answers.A && answers.B >= answers.C) p = 'B';
+        currentProfile = p; // Sauvegarde globale pour le partage
         renderProfile(p);
     }
 
