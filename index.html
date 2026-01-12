@@ -14,10 +14,10 @@
     <style>
         :root {
             /* Palette SOPK GLOW */
-            --primary: #B06D85; /* Vieux Rose / Mauve */
+            --primary: #B06D85; /* Vieux Rose */
             --primary-dark: #8a5266;
             --primary-light: #FFF0F5;
-            --sage: #7D9D8A; /* Vert Sauge doux */
+            --sage: #7D9D8A; /* Vert Sauge */
             --gold: #D4A373; 
             --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #fff0ec 100%);
             --card-bg: rgba(255, 255, 255, 0.95);
@@ -61,7 +61,7 @@
             position: relative;
             transition: all 0.5s ease-in-out;
             flex-shrink: 0;
-            background-color: var(--primary); /* Couleur de fond si l'image charge mal */
+            background-color: var(--primary); /* Fallback color */
         }
         
         .hero-overlay {
@@ -125,15 +125,16 @@
         }
         .btn-outline:hover { background: var(--primary-light); }
 
-        /* PAGE ACCUEIL */
+        /* IMAGE ACCUEIL */
         .intro-illustration {
             width: 100%;
-            height: 180px;
-            object-fit: cover;
+            height: 200px; /* Hauteur fixe */
+            object-fit: cover; /* Recadre l'image proprement */
             border-radius: 20px;
             margin: 20px 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            background-color: #eee; /* Fond gris pendant le chargement */
+            background-color: #EAD0D8; /* Fond rose si image cassée */
+            display: block; /* Force le block */
         }
 
         /* PAGE INFO SOPK */
@@ -149,7 +150,6 @@
         }
         .info-list li { margin-bottom: 10px; padding-left: 10px; position: relative; }
         .info-list li::before { content: "•"; color: var(--primary); position: absolute; left: -10px; font-weight: bold; }
-
 
         /* QUIZ UI */
         .progress-track { background: #f0f0f0; height: 6px; border-radius: 10px; margin-bottom: 25px; }
@@ -168,12 +168,19 @@
         .option-btn:hover .option-char { background: var(--primary); color: white; }
 
         /* RESULTATS */
-        .result-header-container { text-align: center; margin-top: -55px; position: relative; z-index: 10; }
+        .result-header-container { text-align: center; margin-top: -65px; position: relative; z-index: 10; }
+        
         .profile-img {
-            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
-            border: 5px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            background-color: var(--primary-light); /* Fond rose si erreur chargement */
+            width: 120px; 
+            height: 120px; 
+            border-radius: 50%; 
+            object-fit: cover;
+            border: 6px solid white; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background-color: white;
+            display: inline-block; /* Important pour centrage */
         }
+
         .badge-score { display: inline-block; padding: 8px 20px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; margin: 15px 0 10px 0; letter-spacing: 1px; }
         .bg-sage { background: #E3F2E8; color: #4A7C59; }
         .bg-rose { background: #FFF0F5; color: #B06D85; }
@@ -204,7 +211,7 @@
                 Le SOPK n'est pas une fatalité, c'est un message de ton corps. Faisons le point sur tes habitudes avec bienveillance pour trouver ton équilibre.
             </p>
 
-            <img src="https://images.unsplash.com/photo-1544367563-12123d8965cd?q=80&w=1000&auto=format&fit=crop" alt="Bien-être femme" class="intro-illustration">
+            <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Femme bien-être" class="intro-illustration">
 
             <button class="btn-primary" onclick="startQuiz()">
                 Commencer mon bilan
@@ -226,7 +233,7 @@
             <div class="info-section">
                 <h3><i class="ph ph-flower-lotus"></i> Qu'est-ce que le SOPK ?</h3>
                 <div class="info-box">
-                    C'est le trouble hormonal le plus fréquent chez les femmes (1 sur 10). C'est un <strong>déséquilibre endocrinien</strong> (souvent lié à l'insuline) qui perturbe le cycle et la maturation des follicules.
+                    Le Syndrome des Ovaires Polykystiques touche 1 femme sur 10. C'est un <strong>déséquilibre hormonal</strong> (souvent lié à l'insuline) qui empêche les ovaires de fonctionner de manière optimale.
                 </div>
             </div>
 
@@ -235,20 +242,20 @@
                 <div class="info-box" style="border-color: var(--gold);">
                     <ul class="info-list" style="margin:0; padding-left:15px;">
                         <li><strong>Cycles :</strong> Irréguliers ou absents.</li>
-                        <li><strong>Peau & Cheveux :</strong> Acné, pilosité (hirsutisme) ou chute de cheveux.</li>
-                        <li><strong>Poids :</strong> Difficulté à perdre, stockage abdominal.</li>
+                        <li><strong>Signes extérieurs :</strong> Acné, pilosité, chute de cheveux.</li>
+                        <li><strong>Métabolisme :</strong> Prise de poids, fatigue chronique.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="info-section">
-                <h3><i class="ph ph-sparkle"></i> Les Clés du Bien-être</h3>
+                <h3><i class="ph ph-sparkle"></i> Les Clés du Mieux-Être</h3>
                 <div class="info-box" style="border-color: var(--sage); background: var(--primary-light);">
                     <ul class="info-list" style="margin:0; padding-left:15px;">
-                        <li>Privilégier un <strong>petit-déjeuner salé</strong>.</li>
-                        <li>Manger les légumes en début de repas.</li>
-                        <li>Activité physique douce (Marche, Pilates).</li>
-                        <li>Gestion du stress (Yoga, Respiration).</li>
+                        <li>Privilégier un <strong>petit-déjeuner salé</strong> (protéines/gras).</li>
+                        <li>Gérer sa courbe de sucre (légumes en premier).</li>
+                        <li>Activité physique douce mais régulière.</li>
+                        <li>Apaiser le système nerveux (Cortisol).</li>
                     </ul>
                 </div>
             </div>
@@ -271,7 +278,7 @@
 
         <div id="result-screen" class="hidden">
             <div class="result-header-container">
-                <img src="" id="res-img" class="profile-img" alt="Profil Résultat">
+                <img src="https://via.placeholder.com/150" id="res-img" class="profile-img" alt="Profil Résultat">
                 <br>
                 <div id="res-badge" class="badge-score">PROFIL</div>
                 <h2 id="res-title" style="font-family: 'Playfair Display'; font-size: 1.8rem; margin: 10px 0; color: #333;">Titre</h2>
@@ -290,36 +297,37 @@
 </div>
 
 <script>
-    // --- IMAGES VÉRIFIÉES (Liens stables) ---
+    // --- IMAGES FIABILISÉES ---
+    // J'utilise des IDs simples et vérifiés sur Unsplash
     const images = {
-        // Image Header Accueil douce (Fleurs / Thé)
-        intro: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
+        // Intro (Femme fleurs)
+        intro: 'https://images.unsplash.com/photo-1544367563-12123d8965cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         
-        // Header Page Info (Cahier / Zen)
-        info: 'https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=800&q=80',
+        // Page Info (Livre/Calme)
+        info: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         
         // Quiz Thèmes
-        food: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80', 
-        sport: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80', 
-        calm: 'https://images.unsplash.com/photo-1602153508753-4ace888c10a0?auto=format&fit=crop&w=800&q=80',
+        food: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
+        sport: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
+        calm: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         
-        // Image Header Résultat (Abstrait doux / Ciel rose)
-        resultHeader: 'https://images.unsplash.com/photo-1489659639091-8b687bc4386e?auto=format&fit=crop&w=800&q=80',
+        // Header Résultat (Abstrait doux)
+        resultHeader: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         
-        // --- PORTRAITS PROFILS (Liens Corrigés) ---
+        // --- PORTRAITS PROFILS (Nouveaux liens) ---
         // Profil A (Heureuse)
-        profileA: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
-        // Profil B (Pensive/Douce)
-        profileB: 'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?auto=format&fit=crop&w=400&q=80',
-        // Profil C (Besoin de repos)
-        profileC: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=400&q=80'
+        profileA: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        // Profil B (Pensive)
+        profileB: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+        // Profil C (Fatiguée/Calme)
+        profileC: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
     };
 
     // Initialisation
     const hero = document.getElementById('hero-img');
     hero.style.backgroundImage = `url('${images.intro}')`;
 
-    // --- NAVIGATION PAGES ---
+    // --- NAVIGATION ---
     function showInfoPage() {
         document.getElementById('intro-screen').classList.add('hidden');
         document.getElementById('info-screen').classList.remove('hidden');
