@@ -3,263 +3,315 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audit Mode de Vie & SOPK</title>
+    <title>Mon Bilan SOPK & Harmonie</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <style>
         :root {
-            --primary: #4a7c59; /* Vert sauge */
-            --primary-light: #e8f3eb;
-            --accent: #d4a373; /* Terre */
-            --text: #333;
-            --bg: #fdfbf7;
-            --white: #ffffff;
-            --shadow: 0 4px 15px rgba(0,0,0,0.1);
-            --radius: 16px;
+            --primary: #5A8F7B; /* Vert Sauge Profond */
+            --primary-light: #E0F2EB;
+            --accent: #D4A373; /* Terre Chaude */
+            --bg-gradient: linear-gradient(135deg, #fdfbf7 0%, #eef6f3 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-main: #2D3436;
+            --text-light: #636E72;
+            --shadow: 0 10px 30px rgba(90, 143, 123, 0.15);
+            --radius: 24px;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
             margin: 0;
-            padding: 0;
+            padding: 20px;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            min-height: 100vh;
+            align-items: center;
         }
 
-        #app-container {
+        /* Conteneur principal façon "App Mobile" */
+        #app-wrapper {
             width: 100%;
-            max-width: 600px; /* Format mobile/tablette idéal */
-            background: var(--white);
-            min-height: 100vh;
+            max-width: 500px;
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        /* HEADER IMAGE */
+        .hero-header {
+            height: 180px;
+            background-image: url('https://images.unsplash.com/photo-1544367563-12123d8965cd?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
             position: relative;
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
         }
-
-        /* HEADER */
-        header {
+        
+        .hero-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0), rgba(0,0,0,0.6));
+            display: flex;
+            align-items: flex-end;
             padding: 20px;
-            text-align: center;
-            background: var(--primary);
-            color: var(--white);
         }
 
-        header h1 {
+        .hero-title {
+            color: white;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
             margin: 0;
-            font-size: 1.2rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* CONTENU */
+        .content-body {
+            padding: 30px 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ÉCRAN INTRO */
+        .intro-text h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+        
+        .info-pill {
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 10px 15px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
             font-weight: 600;
         }
 
-        /* CONTENT AREA */
-        .content {
-            flex: 1;
-            padding: 25px;
+        .cta-button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: auto;
             display: flex;
-            flex-direction: column;
             justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* INTRO SCREEN */
-        .intro-screen {
-            text-align: center;
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(90, 143, 123, 0.4);
         }
-        .intro-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
+
+        /* QUIZ UI */
+        .progress-track {
+            background: #eee;
+            height: 8px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .category-label {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 10px;
             display: block;
         }
 
-        /* QUIZ SCREEN */
-        .question-card {
-            animation: fadeIn 0.4s ease;
-        }
-        
-        .progress-container {
-            width: 100%;
-            background-color: #eee;
-            height: 6px;
-            margin-bottom: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background-color: var(--primary);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .category-tag {
-            display: inline-block;
-            background: var(--primary-light);
-            color: var(--primary);
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        h2.question-text {
-            font-size: 1.3rem;
-            margin-bottom: 25px;
-            line-height: 1.4;
-        }
-
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .question-card h2 {
+            font-size: 1.4rem;
+            margin: 0 0 25px 0;
+            line-height: 1.3;
         }
 
         .option-btn {
-            background: var(--white);
-            border: 2px solid #eee;
-            padding: 15px;
-            border-radius: 12px;
+            background: white;
+            border: 1px solid #eee;
+            padding: 16px 20px;
+            border-radius: 16px;
+            width: 100%;
             text-align: left;
-            font-size: 1rem;
+            margin-bottom: 12px;
             cursor: pointer;
             transition: all 0.2s;
-            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-family: 'Outfit', sans-serif;
+            color: var(--text-main);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
         }
 
         .option-btn:hover {
             border-color: var(--primary);
             background: var(--primary-light);
+            color: var(--primary);
         }
 
-        .option-btn:active {
-            transform: scale(0.98);
+        .option-circle {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 2px solid #ddd;
+            flex-shrink: 0;
+        }
+        
+        .option-btn:hover .option-circle {
+            border-color: var(--primary);
+            background: var(--primary);
         }
 
-        /* RESULTS SCREEN */
-        .result-screen {
-            animation: slideUp 0.5s ease;
-        }
-
-        .score-card {
-            background: var(--primary-light);
-            padding: 20px;
-            border-radius: var(--radius);
+        /* RESULTATS */
+        .result-header {
             text-align: center;
             margin-bottom: 25px;
-            border: 1px solid var(--primary);
+        }
+        
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        .profile-title {
-            color: var(--primary);
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 5px;
+        .score-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
+        
+        .badge-green { background: #E0F2EB; color: #5A8F7B; }
+        .badge-orange { background: #FFF4E6; color: #D4A373; }
+        .badge-red { background: #FDECEC; color: #E57373; }
 
-        .advice-section {
-            margin-bottom: 20px;
-            padding: 15px;
+        .advice-box {
             background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border-left: 4px solid var(--accent);
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            border-left: 4px solid var(--primary);
         }
 
-        .advice-section h3 {
-            margin-top: 0;
-            color: var(--accent);
-            font-size: 1.1rem;
-        }
+        .advice-box h4 { margin: 0 0 10px 0; color: var(--primary); }
+        .advice-box ul { padding-left: 20px; margin: 0; color: var(--text-light); }
+        .advice-box li { margin-bottom: 8px; }
 
-        .advice-list {
-            padding-left: 20px;
-            margin-bottom: 0;
-        }
-        .advice-list li {
-            margin-bottom: 8px;
-            line-height: 1.5;
-        }
-
-        /* BUTTONS */
-        .cta-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            width: 100%;
-            font-weight: 600;
-            margin-top: 10px;
-            box-shadow: 0 4px 10px rgba(74, 124, 89, 0.3);
-        }
-
-        /* UTILS */
+        /* UTILITAIRES */
         .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.5s ease; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @media (min-width: 600px) {
-            #app-container {
-                margin: 20px;
-                border-radius: 20px;
-                min-height: auto;
-                height: auto;
-            }
-        }
     </style>
 </head>
 <body>
 
-<div id="app-container">
-    <header>
-        <h1>🌸 Audit SOPK & Bien-être</h1>
-    </header>
+<div id="app-wrapper">
+    <div id="hero-img" class="hero-header">
+        <div class="hero-overlay">
+            <h1 class="hero-title">Audit SOPK & Équilibre</h1>
+        </div>
+    </div>
 
-    <div class="content">
+    <div class="content-body">
         
-        <div id="intro" class="intro-screen">
-            <span class="intro-icon">📋</span>
-            <h2>Ton hygiène de vie est-elle adaptée à tes hormones ?</h2>
-            <p style="color: #666; line-height: 1.6; margin-bottom: 30px;">
-                Le SOPK réagit fortement à l'alimentation, au stress et au sommeil. Ce petit questionnaire de 8 questions va analyser tes habitudes pour te donner un plan d'action personnalisé.
-            </p>
-            <button class="cta-btn" onclick="startQuiz()">Commencer l'audit</button>
+        <div id="intro-screen" class="fade-in">
+            <div class="intro-text">
+                <h3>Comprendre pour Mieux Agir</h3>
+                <p style="color: var(--text-light); line-height: 1.6;">
+                    Le Syndrome des Ovaires Polykystiques n'est pas une fatalité. C'est un message de votre corps indiquant un déséquilibre hormonal souvent lié à l'<strong>Insuline</strong> ou au <strong>Cortisol</strong>.
+                </p>
+                
+                <div class="info-pill">
+                    <i class="ph ph-heartbeat" style="font-size: 1.5rem;"></i>
+                    <span>Pas de diagnostic médical, mais un bilan de vos habitudes de vie.</span>
+                </div>
+
+                <div class="info-pill">
+                    <i class="ph ph-plant" style="font-size: 1.5rem;"></i>
+                    <span>Découvrez si votre routine actuelle aide ou freine vos hormones.</span>
+                </div>
+            </div>
+
+            <button class="cta-button" onclick="startQuiz()">
+                Commencer l'audit
+                <i class="ph ph-arrow-right"></i>
+            </button>
         </div>
 
-        <div id="quiz" class="hidden">
-            <div class="progress-container">
-                <div id="progress-bar" class="progress-bar"></div>
+        <div id="quiz-screen" class="hidden">
+            <div class="progress-track">
+                <div id="progress-bar" class="progress-fill"></div>
             </div>
             
-            <div id="question-container" class="question-card">
-                <span id="category-badge" class="category-tag">Nutrition</span>
-                <h2 id="question-text" class="question-text">Question ici...</h2>
-                <div id="options-container" class="options-list">
+            <div id="question-card" class="question-card fade-in">
+                <span id="q-category" class="category-label">Catégorie</span>
+                <h2 id="q-text">La question apparaîtra ici</h2>
+                
+                <div id="q-options">
                     </div>
             </div>
         </div>
 
-        <div id="result" class="result-screen hidden">
-            <div class="score-card">
-                <div>Ton profil dominant :</div>
-                <div id="profile-name" class="profile-title">Titre du Profil</div>
-                <p id="profile-desc" style="font-size: 0.9rem; margin-top:10px;">Description courte...</p>
+        <div id="result-screen" class="hidden">
+            <div class="result-header">
+                <img src="" id="res-img" class="profile-img" alt="Result Image">
+                <br>
+                <div id="res-badge" class="score-badge">PROFIL DÉTECTÉ</div>
+                <h2 id="res-title" style="margin: 10px 0; color: var(--primary);">Titre</h2>
+                <p id="res-desc" style="color: var(--text-light); font-size: 0.95rem;">Description</p>
             </div>
 
-            <div id="detailed-feedback">
+            <div id="res-content">
                 </div>
 
-            <button class="cta-btn" onclick="location.reload()">Refaire le test</button>
+            <button class="cta-button" onclick="location.reload()" style="background-color: var(--text-main);">
+                <i class="ph ph-arrows-clockwise"></i> Refaire le test
+            </button>
         </div>
 
     </div>
@@ -267,219 +319,220 @@
 
 <script>
     // --- DONNÉES DU QUIZ ---
+    // Images thématiques pour l'header (Unsplash)
+    const images = {
+        default: 'https://images.unsplash.com/photo-1544367563-12123d8965cd?q=80&w=2070', // Yoga/Wellness
+        food: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2053', // Healthy Food
+        stress: 'https://images.unsplash.com/photo-1512438248247-f0f2a5a8b7f0?q=80&w=2000', // Calm/Book
+        sleep: 'https://images.unsplash.com/photo-1520206183501-b80df61043c2?q=80&w=2000' // Sleep
+    };
+
     const questions = [
         {
-            category: "Nutrition & Glycémie",
-            text: "À quoi ressemble ton petit-déjeuner type ?",
+            category: "Nutrition & Insuline",
+            img: images.food,
+            text: "Le matin, votre assiette ressemble plutôt à :",
             options: [
-                { text: "Salé (œufs, avocat, fromage) ou jeûne.", value: "A" },
-                { text: "Mixte (tartines, fruit, café).", value: "B" },
-                { text: "Sucré (céréales, jus, confiture).", value: "C" }
+                { text: "Protéines (Œufs, fromage, avocat) ou Jeûne", val: "A" },
+                { text: "Mixte (Pain, beurre, fruit, café)", val: "B" },
+                { text: "Sucré (Céréales, jus, viennoiseries)", val: "C" }
             ]
         },
         {
-            category: "Nutrition & Glycémie",
-            text: "Comment te sens-tu 2h après le déjeuner ?",
+            category: "Nutrition & Insuline",
+            img: images.food,
+            text: "Comment est votre énergie après le déjeuner ?",
             options: [
-                { text: "En forme, énergie stable.", value: "A" },
-                { text: "Léger coup de mou.", value: "B" },
-                { text: "Grosse fatigue, besoin de sucre.", value: "C" }
+                { text: "Stable, je suis productive.", val: "A" },
+                { text: "Un léger coup de mou vers 14h.", val: "B" },
+                { text: "Grosse fatigue, besoin de dormir ou de sucre.", val: "C" }
             ]
         },
         {
-            category: "Nutrition & Glycémie",
-            text: "As-tu des fringales incontrôlables ?",
+            category: "Mouvement",
+            img: images.default,
+            text: "Quel est votre rapport au sport ?",
             options: [
-                { text: "Rarement.", value: "A" },
-                { text: "Parfois (avant les règles).", value: "B" },
-                { text: "Souvent (surtout le soir).", value: "C" }
+                { text: "Musculation, Pilates ou Yoga régulier.", val: "A" },
+                { text: "Sport occasionnel, sans routine.", val: "B" },
+                { text: "Cardio intense pour maigrir OU sédentaire.", val: "C" }
             ]
         },
         {
-            category: "Mouvement & Stress",
-            text: "Ton activité physique principale ?",
+            category: "Gestion du Stress",
+            img: images.stress,
+            text: "Ressentez-vous de l'anxiété ?",
             options: [
-                { text: "Muscu, Pilates, Marche.", value: "A" },
-                { text: "Irrégulier.", value: "B" },
-                { text: "Cardio intense ou sédentaire.", value: "C" }
+                { text: "Je gère bien, j'ai mes moments de calme.", val: "A" },
+                { text: "Souvent stressée, mais ça va.", val: "B" },
+                { text: "Boule au ventre constante ou ruminations.", val: "C" }
             ]
         },
         {
-            category: "Mouvement & Stress",
-            text: "Ton niveau de stress ressenti ?",
+            category: "Sommeil",
+            img: images.sleep,
+            text: "Vos nuits sont-elles réparatrices ?",
             options: [
-                { text: "Géré, je me relaxe.", value: "A" },
-                { text: "Stressée mais je dors.", value: "B" },
-                { text: "Anxiété constante / Épuisement.", value: "C" }
+                { text: "Oui, je dors d'une traite.", val: "A" },
+                { text: "Réveils nocturnes fréquents.", val: "B" },
+                { text: "Insomnies ou réveil épuisé.", val: "C" }
             ]
         },
         {
-            category: "Mouvement & Stress",
-            text: "Marches-tu au quotidien ?",
+            category: "Signaux Corporels",
+            img: images.default,
+            text: "Avez-vous des envies de sucre (fringales) ?",
             options: [
-                { text: "Oui, > 7000 pas ou après repas.", value: "A" },
-                { text: "Juste pour les déplacements.", value: "B" },
-                { text: "Très peu, surtout assise.", value: "C" }
-            ]
-        },
-        {
-            category: "Signaux du Corps",
-            text: "Où stockes-tu le poids principalement ?",
-            options: [
-                { text: "Réparti ou pas de surpoids.", value: "A" },
-                { text: "Hanches / Cuisses.", value: "B" },
-                { text: "Ventre / Abdomen.", value: "C" }
-            ]
-        },
-        {
-            category: "Signaux du Corps",
-            text: "Qualité de ton sommeil ?",
-            options: [
-                { text: "Profond et réparateur.", value: "A" },
-                { text: "Réveils nocturnes.", value: "B" },
-                { text: "Difficile ou non réparateur.", value: "C" }
+                { text: "Rarement.", val: "A" },
+                { text: "Parfois en fin de cycle (SPM).", val: "B" },
+                { text: "Oui, c'est une lutte quotidienne.", val: "C" }
             ]
         }
     ];
 
-    // --- ÉTAT DE L'APPLICATION ---
-    let currentQuestion = 0;
-    let answers = [];
-
-    // --- FONCTIONS LOGIQUES ---
+    // --- LOGIQUE ---
+    let currentIdx = 0;
+    let userAnswers = { A: 0, B: 0, C: 0 };
 
     function startQuiz() {
-        document.getElementById('intro').classList.add('hidden');
-        document.getElementById('quiz').classList.remove('hidden');
-        showQuestion();
+        document.getElementById('intro-screen').classList.add('hidden');
+        document.getElementById('quiz-screen').classList.remove('hidden');
+        loadQuestion();
     }
 
-    function showQuestion() {
-        const q = questions[currentQuestion];
+    function loadQuestion() {
+        const q = questions[currentIdx];
         
-        // Mise à jour UI
-        document.getElementById('category-badge').innerText = q.category;
-        document.getElementById('question-text').innerText = q.text;
-        
-        // Barre de progression
-        const progress = ((currentQuestion) / questions.length) * 100;
-        document.getElementById('progress-bar').style.width = progress + "%";
+        // Update header image with fade effect
+        const hero = document.getElementById('hero-img');
+        hero.style.opacity = 0.5;
+        setTimeout(() => {
+            hero.style.backgroundImage = `url('${q.img}')`;
+            hero.style.opacity = 1;
+        }, 200);
 
-        // Génération des options
-        const container = document.getElementById('options-container');
-        container.innerHTML = ''; // Clear previous
+        // Update Text
+        document.getElementById('q-category').innerText = q.category;
+        document.getElementById('q-text').innerText = q.text;
+
+        // Progress Bar
+        const pct = ((currentIdx) / questions.length) * 100;
+        document.getElementById('progress-bar').style.width = `${pct}%`;
+
+        // Generate Buttons
+        const container = document.getElementById('q-options');
+        container.innerHTML = '';
+        
+        // Add fade-in animation reset
+        const card = document.getElementById('question-card');
+        card.classList.remove('fade-in');
+        void card.offsetWidth; // trigger reflow
+        card.classList.add('fade-in');
 
         q.options.forEach(opt => {
-            const btn = document.createElement('button');
+            const btn = document.createElement('div');
             btn.className = 'option-btn';
-            btn.innerText = opt.text;
-            btn.onclick = () => selectAnswer(opt.value);
+            btn.innerHTML = `<div class="option-circle"></div><span>${opt.text}</span>`;
+            btn.onclick = () => handleAnswer(opt.val);
             container.appendChild(btn);
         });
     }
 
-    function selectAnswer(val) {
-        answers.push(val);
-        
-        if (currentQuestion < questions.length - 1) {
-            currentQuestion++;
-            showQuestion();
+    function handleAnswer(val) {
+        userAnswers[val]++;
+        currentIdx++;
+
+        if (currentIdx < questions.length) {
+            loadQuestion();
         } else {
-            finishQuiz();
+            showResults();
         }
     }
 
-    function finishQuiz() {
-        document.getElementById('quiz').classList.add('hidden');
-        document.getElementById('result').classList.remove('hidden');
-        calculateResult();
-    }
+    function showResults() {
+        document.getElementById('quiz-screen').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('hero-img').style.backgroundImage = `url('https://images.unsplash.com/photo-1499209971180-41f3dd98af2e?q=80&w=2070')`; // Celebration image
 
-    function calculateResult() {
-        const counts = { A: 0, B: 0, C: 0 };
-        answers.forEach(a => counts[a]++);
-
-        // Logique de détermination du profil
-        let profile = "";
-        if (counts.A >= counts.B && counts.A >= counts.C) profile = "A";
-        else if (counts.B >= counts.A && counts.B >= counts.C) profile = "B";
-        else profile = "C";
-
-        // Cas d'égalité (priorité au risque le plus élevé pour la prévention)
-        if (counts.C === counts.B && counts.C > counts.A) profile = "C";
+        // Determine Winner
+        let profile = 'C'; // default
+        if (userAnswers.A >= userAnswers.B && userAnswers.A >= userAnswers.C) profile = 'A';
+        else if (userAnswers.B >= userAnswers.A && userAnswers.B >= userAnswers.C) profile = 'B';
         
-        renderFeedback(profile, counts);
+        // Priority to C in case of ties (precaution principle)
+        if (userAnswers.C === userAnswers.A || userAnswers.C === userAnswers.B) profile = 'C';
+
+        renderProfile(profile);
     }
 
-    function renderFeedback(profile, counts) {
-        const titleEl = document.getElementById('profile-name');
-        const descEl = document.getElementById('profile-desc');
-        const detailsEl = document.getElementById('detailed-feedback');
+    function renderProfile(type) {
+        const title = document.getElementById('res-title');
+        const desc = document.getElementById('res-desc');
+        const badge = document.getElementById('res-badge');
+        const content = document.getElementById('res-content');
+        const img = document.getElementById('res-img');
 
-        let data = {};
-
-        if (profile === "A") {
-            data = {
-                title: "🟢 La Maîtrise Hormonale",
-                desc: "Ton mode de vie est un allié puissant pour tes ovaires.",
-                content: `
-                    <div class="advice-section">
-                        <h3>Ce que tu fais bien :</h3>
-                        <p>Bravo ! Tes réponses indiquent une glycémie stable et une bonne gestion du stress. C'est la clé pour mettre le SOPK "en sommeil".</p>
-                    </div>
-                    <div class="advice-section">
-                        <h3>Pistes d'amélioration :</h3>
-                        <ul class="advice-list">
-                            <li>Si des symptômes persistent, vérifie tes taux de Vitamine D et Zinc.</li>
-                            <li>Maintiens tes efforts sur la musculation douce.</li>
-                            <li>Attention aux perturbateurs endocriniens (plastiques, cosmétiques).</li>
-                        </ul>
-                    </div>
-                `
-            };
-        } else if (profile === "B") {
-            data = {
-                title: "🟠 En Transition",
-                desc: "Tu es sur la bonne voie, mais quelques ajustements feront toute la différence.",
-                content: `
-                    <div class="advice-section">
-                        <h3>Analyse :</h3>
-                        <p>Tu fais des efforts, mais des pics d'insuline ou de cortisol perturbent encore tes résultats. C'est frustrant, mais facile à corriger.</p>
-                    </div>
-                    <div class="advice-section">
-                        <h3>Ton Plan d'Action Prioritaire :</h3>
-                        <ul class="advice-list">
-                            <li><strong>Le Petit-Dèj :</strong> Passe impérativement au SALÉ (œufs, fromage) pour supprimer les fringales de 11h et 16h.</li>
-                            <li><strong>Marche :</strong> Ajoute 10 min de marche après le déjeuner.</li>
-                            <li><strong>Stress :</strong> Intègre 5 min de cohérence cardiaque le soir.</li>
-                        </ul>
-                    </div>
-                `
-            };
+        if (type === 'A') {
+            img.src = "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=200"; // Happy/Active
+            badge.innerText = "PROFIL : HARMONIE";
+            badge.className = "score-badge badge-green";
+            title.innerText = "La Maîtrise Hormonale";
+            desc.innerText = "Vos habitudes sont excellentes pour le SOPK.";
+            content.innerHTML = `
+                <div class="advice-box">
+                    <h4><i class="ph ph-check-circle"></i> Points forts</h4>
+                    <p>Votre glycémie semble stable et votre stress géré. Vous avez trouvé l'équilibre qui apaise vos ovaires.</p>
+                </div>
+                <div class="advice-box" style="border-left-color: var(--accent);">
+                    <h4><i class="ph ph-sparkle"></i> Prochaine étape</h4>
+                    <ul>
+                        <li>Continuez la musculation douce.</li>
+                        <li>Vérifiez vos taux de Vitamine D une fois par an.</li>
+                        <li>Attention aux perturbateurs endocriniens dans vos produits de beauté.</li>
+                    </ul>
+                </div>
+            `;
+        } else if (type === 'B') {
+            img.src = "https://images.unsplash.com/photo-1517832606299-7ae9b720a186?q=80&w=200"; // Thinking/Tea
+            badge.innerText = "PROFIL : TRANSITION";
+            badge.className = "score-badge badge-orange";
+            title.innerText = "Sur la Bonne Voie";
+            desc.innerText = "Quelques ajustements suffiront à changer la donne.";
+            content.innerHTML = `
+                <div class="advice-box">
+                    <h4><i class="ph ph-chart-line-up"></i> Analyse</h4>
+                    <p>Vous faites beaucoup d'efforts, mais de petits pics d'insuline ou de stress freinent vos résultats.</p>
+                </div>
+                <div class="advice-box" style="border-left-color: var(--accent);">
+                    <h4><i class="ph ph-list-checks"></i> Actions Prioritaires</h4>
+                    <ul>
+                        <li><strong>Petit-Déjeuner :</strong> Passez au 100% Salé (Œufs/Avocat) pour stopper les fringales.</li>
+                        <li><strong>Mouvement :</strong> Marchez 10min après chaque repas.</li>
+                        <li><strong>Soir :</strong> Coupez les écrans 1h avant de dormir.</li>
+                    </ul>
+                </div>
+            `;
         } else {
-            data = {
-                title: "🔴 Le Cercle Inflammatoire",
-                desc: "Ton corps est en alerte. Tes symptômes sont nourris par ton mode de vie actuel.",
-                content: `
-                    <div class="advice-section">
-                        <h3>Analyse :</h3>
-                        <p>Ne culpabilise pas. Ton insuline est probablement élevée, ce qui cause cette fatigue chronique et ce stockage abdominal.</p>
-                    </div>
-                    <div class="advice-section">
-                        <h3>Tes 3 premiers pas (Douceur) :</h3>
-                        <ul class="advice-list">
-                            <li><strong>Ordre des aliments :</strong> Mange tes légumes/fibres EN PREMIER à chaque repas. C'est tout.</li>
-                            <li><strong>Stop au Cardio violent :</strong> Arrête de t'épuiser. Marche simplement 20 min par jour.</li>
-                            <li><strong>Vinaigre de cidre :</strong> 1 c.à.s dans de l'eau avant le repas le plus riche pour couper le pic de sucre.</li>
-                        </ul>
-                    </div>
-                `
-            };
+            img.src = "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=200"; // Resting
+            badge.innerText = "PROFIL : INFLAMMATION";
+            badge.className = "score-badge badge-red";
+            title.innerText = "Le Cercle Inflammatoire";
+            desc.innerText = "Votre corps est en alerte, il faut l'apaiser en douceur.";
+            content.innerHTML = `
+                <div class="advice-box">
+                    <h4><i class="ph ph-first-aid"></i> Analyse Bienveillante</h4>
+                    <p>Ne culpabilisez pas. Votre fatigue et vos symptômes sont nourris par une résistance à l'insuline élevée.</p>
+                </div>
+                <div class="advice-box" style="border-left-color: var(--accent);">
+                    <h4><i class="ph ph-star"></i> Vos 3 Habitudes "Douces"</h4>
+                    <ul>
+                        <li><strong>Ordre des repas :</strong> Mangez toujours les légumes EN PREMIER.</li>
+                        <li><strong>Stop Cardio :</strong> Arrêtez le sport violent, préférez la marche douce.</li>
+                        <li><strong>Hack :</strong> 1 c.à.s de vinaigre de cidre dans l'eau avant de manger.</li>
+                    </ul>
+                </div>
+            `;
         }
-
-        titleEl.innerText = data.title;
-        descEl.innerText = data.desc;
-        detailsEl.innerHTML = data.content;
     }
 </script>
 
