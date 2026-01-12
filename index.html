@@ -21,7 +21,7 @@
             --sage-light: #E8F3EB;
             --gold: #D4A373; 
             --gold-light: #FFF8E1;
-            --alert-bg: #FEECEC; /* Fond Alerte doux */
+            --alert-bg: #FEECEC;
             --alert-text: #C05858;
             
             --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #fff0ec 100%);
@@ -116,13 +116,11 @@
             100% { box-shadow: 0 0 0 0 rgba(212, 163, 115, 0); }
         }
 
-        /* BOUTON ALERT (TABAC) */
         .btn-alert {
             background: #fff; color: var(--alert-text); border: 1px solid var(--alert-bg);
             font-size: 0.95rem; padding: 15px;
         }
         .btn-alert:hover { background: var(--alert-bg); }
-
 
         /* ELEMENTS */
         .intro-illustration {
@@ -222,11 +220,38 @@
             <button class="btn-base btn-outline" onclick="hideInfoPage()" style="padding: 10px; width: auto; font-size: 0.9rem; border:none;">
                 <i class="ph ph-arrow-left"></i> Retour
             </button>
+            
             <div class="info-section">
                 <h3><i class="ph ph-flower-lotus"></i> Qu'est-ce que le SOPK ?</h3>
-                <div class="info-box">Le Syndrome des Ovaires Polykystiques est un déséquilibre hormonal (souvent lié à l'insuline) qui touche 1 femme sur 10.</div>
+                <div class="info-box">
+                    Le Syndrome des Ovaires Polykystiques touche 1 femme sur 10. Ce n'est pas une maladie des ovaires, mais un <strong>déséquilibre hormonal</strong> (souvent lié à l'insuline) qui perturbe la communication entre le cerveau et les ovaires.
+                </div>
             </div>
-            <button class="btn-base btn-primary" onclick="startQuiz()">Faire le test maintenant</button>
+
+            <div class="info-section">
+                <h3><i class="ph ph-activity"></i> Effets sur le corps</h3>
+                <div class="info-box" style="border-color: var(--gold);">
+                    <ul class="info-list" style="margin:0; padding-left:15px;">
+                        <li><strong>Cycles :</strong> Règles irrégulières, absentes ou très longues.</li>
+                        <li><strong>Physique :</strong> Acné, pilosité excessive (hirsutisme) ou chute de cheveux.</li>
+                        <li><strong>Métabolisme :</strong> Prise de poids facile (surtout ventre), fatigue chronique, fringales.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="info-section">
+                <h3><i class="ph ph-sparkle"></i> Les Clés du Mieux-Être</h3>
+                <div class="info-box" style="border-color: var(--primary); background: var(--primary-light);">
+                    <p style="margin-top:0;">On ne guérit pas le SOPK, mais on peut "endormir" les symptômes :</p>
+                    <ul class="info-list" style="margin:0; padding-left:15px;">
+                        <li><strong>Nutrition :</strong> Petit-déjeuner salé & Légumes en premier.</li>
+                        <li><strong>Mouvement :</strong> Activité régulière mais douce (évitez le cardio épuisant).</li>
+                        <li><strong>Mental :</strong> Réduire le stress (cortisol) est aussi important que manger sainement.</li>
+                    </ul>
+                </div>
+            </div>
+
+             <button class="btn-base btn-primary" onclick="startQuiz()">Faire le test maintenant</button>
         </div>
 
         <div id="quiz-screen" class="hidden">
@@ -268,7 +293,7 @@
                 <p id="chal-intro" style="margin:0; text-align:center; font-style:italic;">Intro challenge...</p>
             </div>
             <div id="chal-steps"></div>
-            <button class="btn-base btn-primary" onclick="alert('Challenge accepté !')"><i class="ph ph-check-circle"></i> J'accepte le Challenge</button>
+            <button class="btn-base btn-primary" onclick="alert('Challenge accepté ! Prends une capture d\'écran ✨')"><i class="ph ph-check-circle"></i> J'accepte le Challenge</button>
             <button class="btn-base btn-outline" onclick="backToResult()"><i class="ph ph-arrow-left"></i> Retour</button>
         </div>
 
@@ -285,23 +310,23 @@
             <div class="warning-box">
                 <div class="warning-title"><i class="ph ph-cigarette-slash" style="font-size:1.4rem;"></i> Le Tabac</div>
                 <ul class="info-list" style="margin:0; padding-left:15px; font-size:0.95rem;">
-                    <li><strong>Explosion des Androgènes :</strong> La nicotine stimule directement les glandes surrénales, augmentant la production d'hormones mâles (poils, acné, chute de cheveux).</li>
-                    <li><strong>Insuline :</strong> Fumer double le risque de résistance à l'insuline, ce qui rend la perte de poids abdominale très difficile.</li>
-                    <li><strong>Risque Cardiovasculaire :</strong> Le SOPK fragilise déjà le cœur, le tabac multiplie ce risque par 3.</li>
+                    <li><strong>Explosion des Androgènes :</strong> La nicotine stimule directement les surrénales, augmentant la production d'hormones mâles (poils, acné).</li>
+                    <li><strong>Insuline :</strong> Fumer double le risque de résistance à l'insuline, rendant la perte de poids difficile.</li>
+                    <li><strong>Cœur :</strong> Le SOPK fragilise déjà le système cardiovasculaire, le tabac multiplie ce risque.</li>
                 </ul>
             </div>
 
             <div class="info-box" style="border-left-color: var(--gold);">
                 <div class="warning-title" style="color:var(--text-main);"><i class="ph ph-plant" style="font-size:1.4rem; color:var(--gold);"></i> Le Cannabis</div>
                 <ul class="info-list" style="margin:0; padding-left:15px; font-size:0.95rem;">
-                    <li><strong>Perturbation du Cycle :</strong> Le THC agit sur l'hypothalamus, le "chef d'orchestre" des ovaires. Il peut bloquer l'ovulation et dérégler totalement les règles.</li>
-                    <li><strong>Prolactine & Cortisol :</strong> Une consommation régulière augmente le cortisol (stress) et modifie la prolactine, aggravant l'infertilité.</li>
-                    <li><strong>Fringales (Munchies) :</strong> Les envies de sucre provoquées par le cannabis créent des pics d'insuline violents, nourrissant l'inflammation du SOPK.</li>
+                    <li><strong>Cycle Bloqué :</strong> Le THC agit sur le cerveau et peut bloquer l'ovulation, déréglant totalement les règles.</li>
+                    <li><strong>Prolactine & Cortisol :</strong> Une consommation régulière augmente le stress (cortisol) et perturbe la fertilité.</li>
+                    <li><strong>Fringales :</strong> Les envies de sucre provoquées par le cannabis créent des pics d'insuline nocifs pour le SOPK.</li>
                 </ul>
             </div>
 
             <div class="info-box" style="background:var(--sage-light); border:none;">
-                <strong>💡 Le Conseil :</strong> Réduire même légèrement la consommation a un impact visible sur l'acné et le cycle en seulement 3 mois.
+                <strong>💡 Le Conseil :</strong> Réduire la consommation a un impact positif visible sur l'acné et le cycle en seulement 3 mois.
             </div>
         </div>
 
@@ -309,11 +334,11 @@
 </div>
 
 <script>
-    // --- IMAGES ---
+    // --- IMAGES SÉCURISÉES ---
     const images = {
         intro: 'https://images.unsplash.com/photo-1544367563-12123d8965cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         info: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        substance: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Image Nature/Serenity
+        substance: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
         food: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
         sport: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
         calm: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
@@ -347,7 +372,6 @@
         hero.style.backgroundImage = `url('${images.intro}')`; hero.style.height = "180px";
     }
     
-    // NOUVELLES FONCTIONS SUBSTANCE
     function showSubstancePage() {
         document.getElementById('result-screen').classList.add('hidden');
         document.getElementById('substance-screen').classList.remove('hidden');
