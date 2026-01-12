@@ -20,7 +20,7 @@
             --sage: #7D9D8A; /* Vert Sauge doux */
             --gold: #D4A373; 
             --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #fff0ec 100%);
-            --card-bg: rgba(255, 255, 255, 0.92);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text-main: #4A4A4A;
             --text-light: #7a7a7a;
             --radius: 30px;
@@ -47,10 +47,9 @@
             overflow: hidden;
             position: relative;
             min-height: 85vh;
-            max-height: 95vh; /* Pour le scroll sur la page info */
+            max-height: 95vh;
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
@@ -62,12 +61,13 @@
             position: relative;
             transition: all 0.5s ease-in-out;
             flex-shrink: 0;
+            background-color: var(--primary); /* Couleur de fond si l'image charge mal */
         }
         
         .hero-overlay {
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top, rgba(176, 109, 133, 0.7), rgba(255,240,245,0.2));
+            background: linear-gradient(to top, rgba(176, 109, 133, 0.8), rgba(255,240,245,0.1));
             display: flex;
             align-items: flex-end;
             padding: 25px;
@@ -86,16 +86,12 @@
         .content-body {
             padding: 25px;
             flex: 1;
-            overflow-y: auto; /* Permet le scroll si le contenu est long */
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            /* Scrollbar élégante */
             scrollbar-width: thin;
             scrollbar-color: var(--primary-light) transparent;
         }
-        .content-body::-webkit-scrollbar { width: 6px; }
-        .content-body::-webkit-scrollbar-thumb { background-color: var(--primary-light); border-radius: 10px; }
-
 
         /* --- ELEMENTS UI --- */
         .btn-primary, .btn-outline {
@@ -137,6 +133,7 @@
             border-radius: 20px;
             margin: 20px 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            background-color: #eee; /* Fond gris pendant le chargement */
         }
 
         /* PAGE INFO SOPK */
@@ -171,10 +168,11 @@
         .option-btn:hover .option-char { background: var(--primary); color: white; }
 
         /* RESULTATS */
-        .result-header-container { text-align: center; margin-top: -50px; position: relative; z-index: 10; }
+        .result-header-container { text-align: center; margin-top: -55px; position: relative; z-index: 10; }
         .profile-img {
-            width: 110px; height: 110px; border-radius: 50%; object-fit: cover;
+            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
             border: 5px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background-color: var(--primary-light); /* Fond rose si erreur chargement */
         }
         .badge-score { display: inline-block; padding: 8px 20px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; margin: 15px 0 10px 0; letter-spacing: 1px; }
         .bg-sage { background: #E3F2E8; color: #4A7C59; }
@@ -206,7 +204,7 @@
                 Le SOPK n'est pas une fatalité, c'est un message de ton corps. Faisons le point sur tes habitudes avec bienveillance pour trouver ton équilibre.
             </p>
 
-            <img src="https://images.unsplash.com/photo-1528351655744-203e1c26d91e?q=80&w=1000&auto=format&fit=crop" alt="Bien-être femme" class="intro-illustration">
+            <img src="https://images.unsplash.com/photo-1544367563-12123d8965cd?q=80&w=1000&auto=format&fit=crop" alt="Bien-être femme" class="intro-illustration">
 
             <button class="btn-primary" onclick="startQuiz()">
                 Commencer mon bilan
@@ -228,7 +226,7 @@
             <div class="info-section">
                 <h3><i class="ph ph-flower-lotus"></i> Qu'est-ce que le SOPK ?</h3>
                 <div class="info-box">
-                    C'est le trouble hormonal le plus fréquent chez les femmes en âge de procréer (1 sur 10). Ce n'est pas une maladie des ovaires à proprement parler, mais un <strong>déséquilibre endocrinien</strong> (souvent lié à l'insuline) qui empêche les ovaires de fonctionner correctement.
+                    C'est le trouble hormonal le plus fréquent chez les femmes (1 sur 10). C'est un <strong>déséquilibre endocrinien</strong> (souvent lié à l'insuline) qui perturbe le cycle et la maturation des follicules.
                 </div>
             </div>
 
@@ -236,35 +234,21 @@
                 <h3><i class="ph ph-activity"></i> Effets sur le corps</h3>
                 <div class="info-box" style="border-color: var(--gold);">
                     <ul class="info-list" style="margin:0; padding-left:15px;">
-                        <li><strong>Cycles irréguliers :</strong> Règles rares, absentes ou très longues.</li>
-                        <li><strong>Hyperandrogénie :</strong> Excès d'hormones "masculines" causant acné, pilosité excessive (hirsutisme) ou chute de cheveux.</li>
-                        <li><strong>Aspect des ovaires :</strong> Multiples petits follicules visibles à l'échographie.</li>
-                    </ul>
-                </div>
-            </div>
-
-             <div class="info-section">
-                <h3><i class="ph ph-warning-circle"></i> Risques associés (Non traités)</h3>
-                <div class="info-box" style="border-color: var(--primary);">
-                    <ul class="info-list" style="margin:0; padding-left:15px;">
-                         <li>Difficultés de fertilité.</li>
-                         <li>Résistance à l'insuline pouvant mener au diabète de type 2.</li>
-                         <li>Prise de poids (surtout abdominale) difficile à perdre.</li>
-                         <li>Fatigue chronique, anxiété et sautes d'humeur.</li>
+                        <li><strong>Cycles :</strong> Irréguliers ou absents.</li>
+                        <li><strong>Peau & Cheveux :</strong> Acné, pilosité (hirsutisme) ou chute de cheveux.</li>
+                        <li><strong>Poids :</strong> Difficulté à perdre, stockage abdominal.</li>
                     </ul>
                 </div>
             </div>
 
             <div class="info-section">
-                <h3><i class="ph ph-sparkle"></i> Préconisations Douces</h3>
+                <h3><i class="ph ph-sparkle"></i> Les Clés du Bien-être</h3>
                 <div class="info-box" style="border-color: var(--sage); background: var(--primary-light);">
-                    <p>Le pilier n°1 est l'hygiène de vie pour stabiliser la glycémie :</p>
                     <ul class="info-list" style="margin:0; padding-left:15px;">
-                        <li>Privilégier un <strong>petit-déjeuner salé</strong> et protéiné.</li>
-                        <li>Manger les fibres (légumes) en début de repas.</li>
-                        <li>Pratiquer une activité physique douce et régulière (marche, renforcement).</li>
-                        <li>Gérer le stress (le cortisol aggrave le SOPK).</li>
-                        <li>Éviter les perturbateurs endocriniens.</li>
+                        <li>Privilégier un <strong>petit-déjeuner salé</strong>.</li>
+                        <li>Manger les légumes en début de repas.</li>
+                        <li>Activité physique douce (Marche, Pilates).</li>
+                        <li>Gestion du stress (Yoga, Respiration).</li>
                     </ul>
                 </div>
             </div>
@@ -287,7 +271,7 @@
 
         <div id="result-screen" class="hidden">
             <div class="result-header-container">
-                <img src="" id="res-img" class="profile-img" alt="Profil">
+                <img src="" id="res-img" class="profile-img" alt="Profil Résultat">
                 <br>
                 <div id="res-badge" class="badge-score">PROFIL</div>
                 <h2 id="res-title" style="font-family: 'Playfair Display'; font-size: 1.8rem; margin: 10px 0; color: #333;">Titre</h2>
@@ -306,14 +290,29 @@
 </div>
 
 <script>
-    // --- IMAGES (Unsplash) ---
+    // --- IMAGES VÉRIFIÉES (Liens stables) ---
     const images = {
-        intro: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?q=80&w=2000', // Image Header Accueil douce
-        info: 'https://images.unsplash.com/photo-1505576399279-565b52d4ac71?q=80&w=2000', // Header Page Info
-        food: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=2000', 
-        sport: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=2000', 
-        calm: 'https://images.unsplash.com/photo-1602153508753-4ace888c10a0?q=80&w=2000',
-        resultHeader: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=2000' // Image Header Résultat (Abstrait doux)
+        // Image Header Accueil douce (Fleurs / Thé)
+        intro: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=800&q=80',
+        
+        // Header Page Info (Cahier / Zen)
+        info: 'https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=800&q=80',
+        
+        // Quiz Thèmes
+        food: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80', 
+        sport: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80', 
+        calm: 'https://images.unsplash.com/photo-1602153508753-4ace888c10a0?auto=format&fit=crop&w=800&q=80',
+        
+        // Image Header Résultat (Abstrait doux / Ciel rose)
+        resultHeader: 'https://images.unsplash.com/photo-1489659639091-8b687bc4386e?auto=format&fit=crop&w=800&q=80',
+        
+        // --- PORTRAITS PROFILS (Liens Corrigés) ---
+        // Profil A (Heureuse)
+        profileA: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
+        // Profil B (Pensive/Douce)
+        profileB: 'https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?auto=format&fit=crop&w=400&q=80',
+        // Profil C (Besoin de repos)
+        profileC: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=400&q=80'
     };
 
     // Initialisation
@@ -326,7 +325,7 @@
         document.getElementById('info-screen').classList.remove('hidden');
         document.getElementById('header-title').innerText = "Comprendre";
         hero.style.backgroundImage = `url('${images.info}')`;
-        hero.style.height = "160px"; // Header un peu plus petit sur la page info
+        hero.style.height = "160px";
     }
 
     function hideInfoPage() {
@@ -351,7 +350,7 @@
 
     function startQuiz() {
         document.getElementById('intro-screen').classList.add('hidden');
-        document.getElementById('info-screen').classList.add('hidden'); // Au cas où on vient de la page info
+        document.getElementById('info-screen').classList.add('hidden'); 
         document.getElementById('quiz-screen').classList.remove('hidden');
         document.getElementById('header-title').innerText = "Le Bilan";
         hero.style.height = "180px";
@@ -386,9 +385,8 @@
         document.getElementById('quiz-screen').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
         
-        // --- FIX HEADER IMAGE RESULTAT ---
-        hero.style.height = "140px"; // Réduire la taille
-        hero.style.backgroundImage = `url('${images.resultHeader}')`; // Nouvelle image abstraite douce
+        hero.style.height = "140px"; 
+        hero.style.backgroundImage = `url('${images.resultHeader}')`; 
         document.getElementById('header-title').innerText = "Tes Résultats";
 
         let profile = 'C';
@@ -399,22 +397,24 @@
     }
 
     function renderProfile(p) {
-        const img = document.getElementById('res-img'); const badge = document.getElementById('res-badge');
-        const title = document.getElementById('res-title'); const desc = document.getElementById('res-desc');
+        const img = document.getElementById('res-img'); 
+        const badge = document.getElementById('res-badge');
+        const title = document.getElementById('res-title'); 
+        const desc = document.getElementById('res-desc');
         const content = document.getElementById('res-content');
 
         if (p === 'A') {
-            img.src = "https://images.unsplash.com/photo-1538333491813-c2ab03df9381?q=80&w=300";
+            img.src = images.profileA;
             badge.className = "badge-score bg-sage"; badge.innerText = "🌸 PROFIL HARMONIE";
             title.innerText = "La Maîtrise Douce"; desc.innerText = "Ton hygiène de vie est un cocon protecteur pour tes hormones.";
             content.innerHTML = `<div class="advice-box"><h4 style="color:var(--sage); margin:0 0 10px 0;">✨ Analyse :</h4><p>Ta glycémie semble stable et ton corps se sent en sécurité. C'est l'état idéal pour "endormir" les symptômes du SOPK.</p></div>`;
         } else if (p === 'B') {
-            img.src = "https://images.unsplash.com/photo-1521119989659-a83eee488058?q=80&w=300";
+            img.src = images.profileB;
             badge.className = "badge-score bg-gold"; badge.innerText = "🌟 EN TRANSITION";
             title.innerText = "Presque à l'équilibre"; desc.innerText = "Tu es sur la bonne voie, quelques ajustements feront la différence.";
             content.innerHTML = `<div class="advice-box"><h4 style="color:var(--primary); margin:0 0 10px 0;">🚀 Conseil prioritaire :</h4><p>Concentre-toi sur le <strong>Petit-Déjeuner Salé</strong>. C'est le levier n°1 pour stopper les fringales et l'inflammation de la journée.</p></div>`;
         } else {
-            img.src = "https://images.unsplash.com/photo-1519792634786-167414261cb1?q=80&w=300";
+            img.src = images.profileC;
             badge.className = "badge-score bg-rose"; badge.innerText = "❤️ BESOIN DE DOUCEUR";
             title.innerText = "Le Corps en Alerte"; desc.innerText = "Tes réponses indiquent que ton insuline ou ton stress sont élevés.";
             content.innerHTML = `<div class="advice-box"><h4 style="color:var(--primary); margin:0 0 10px 0;">🕊️ Premier pas :</h4><p>Ne change pas tout. Commence juste par <strong>manger tes légumes en premier</strong> à chaque repas, et marche 10 min par jour. C'est tout.</p></div>`;
