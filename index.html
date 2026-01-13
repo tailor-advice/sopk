@@ -3,552 +3,266 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Cocon SOPK</title>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
-    
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
+    <title>MySOPK - Accompagnement</title>
     <style>
         :root {
-            /* Palette SOPK GLOW */
-            --primary: #B06D85; /* Vieux Rose */
-            --primary-dark: #8a5266;
-            --primary-light: #FFF0F5;
-            --sage: #7D9D8A; /* Vert Sauge */
-            --sage-light: #E8F3EB;
-            --gold: #D4A373; 
-            --gold-light: #FFF8E1;
-            --alert-bg: #FEECEC;
-            --alert-text: #C05858;
-            
-            --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #fff0ec 100%);
-            --card-bg: rgba(255, 255, 255, 0.96);
-            --text-main: #4A4A4A;
-            --text-light: #7a7a7a;
-            --radius: 30px;
+            --primary: #d63384; /* Rose SOPK */
+            --secondary: #f8d7da;
+            --bg: #fdf2f5;
+            --text: #333;
+            --card-bg: #ffffff;
+            --whatsapp: #25D366;
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: var(--bg-gradient);
-            color: var(--text-main);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 15px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 0;
+            line-height: 1.6;
         }
 
-        #app-wrapper {
-            width: 100%;
-            max-width: 460px;
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            box-shadow: 0 20px 40px rgba(176, 109, 133, 0.15);
-            overflow: hidden;
-            position: relative;
-            min-height: 85vh;
-            max-height: 95vh;
+        /* En-tête */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        h1 { margin: 0; font-size: 1.5rem; }
+        h2 { color: var(--primary); border-bottom: 2px solid var(--secondary); padding-bottom: 5px; }
+        h3 { color: #555; margin-top: 20px; }
+
+        /* Navigation / Pages */
+        .page {
+            display: none; /* Caché par défaut */
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 0.3s;
+        }
+
+        .page.active {
+            display: block; /* Affiché si actif */
+        }
+
+        /* Menu Principal (Grille) */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .menu-btn {
+            background-color: var(--card-bg);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
-            border: 1px solid rgba(255, 255, 255, 0.6);
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
         }
 
-        /* --- HEADER --- */
-        .hero-header {
-            height: 180px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-            transition: all 0.5s ease-in-out;
-            flex-shrink: 0;
+        .menu-btn:hover {
             background-color: var(--primary);
-        }
-        .hero-overlay {
-            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(to top, rgba(176, 109, 133, 0.85), rgba(255,240,245,0.1));
-            display: flex; align-items: flex-end; padding: 25px;
-        }
-        .hero-title {
-            color: white; font-family: 'Playfair Display', serif;
-            font-size: 2rem; margin: 0; line-height: 1.1;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            color: white;
+            transform: translateY(-2px);
         }
 
-        /* CONTENT */
-        .content-body {
-            padding: 25px; flex: 1; overflow-y: auto;
-            display: flex; flex-direction: column;
-            scrollbar-width: thin; scrollbar-color: var(--primary-light) transparent;
+        .menu-btn.whatsapp {
+            background-color: var(--whatsapp);
+            border-color: var(--whatsapp);
+            color: white;
+            grid-column: span 2; /* Prend toute la largeur */
         }
 
-        /* --- BUTTONS --- */
-        .btn-base {
-            padding: 18px; border-radius: 50px; font-size: 1.05rem; font-weight: 600;
-            width: 100%; cursor: pointer; transition: all 0.2s;
-            display: flex; justify-content: center; align-items: center; gap: 10px;
-            margin-bottom: 15px; font-family: 'Outfit', sans-serif; border: none;
+        /* Cartes de contenu */
+        .card {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, #c47e95 100%);
-            color: white; box-shadow: 0 8px 20px rgba(176, 109, 133, 0.25);
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(176, 109, 133, 0.35); }
-
-        .btn-outline {
-            background: transparent; color: var(--primary); border: 2px solid var(--primary);
-        }
-        .btn-outline:hover { background: var(--primary-light); }
-
-        .btn-challenge {
-            background: linear-gradient(135deg, var(--gold) 0%, #e6b98d 100%);
-            color: white; box-shadow: 0 8px 20px rgba(212, 163, 115, 0.3);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(212, 163, 115, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(212, 163, 115, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(212, 163, 115, 0); }
-        }
-
-        .btn-alert {
-            background: #fff; color: var(--alert-text); border: 1px solid var(--alert-bg);
-            font-size: 0.95rem; padding: 15px;
-        }
-        .btn-alert:hover { background: var(--alert-bg); }
-        
-        /* Bouton TikTok Spécifique */
-        .btn-tiktok {
-            background: #000000; color: white;
-            box-shadow: 0 8px 20px rgba(0,0,0, 0.2);
-        }
-        .btn-tiktok:hover { transform: translateY(-2px); background: #222; }
-
-
-        /* ELEMENTS */
-        .intro-illustration {
-            width: 100%; height: 200px; object-fit: cover; border-radius: 20px;
-            margin: 20px 0; box-shadow: 0 5px 15px rgba(0,0,0,0.05); background-color: #EAD0D8;
-        }
-
-        .info-section h3, .challenge-section h3 {
-            font-family: 'Playfair Display', serif; color: var(--primary);
-            font-size: 1.4rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;
-        }
-        .info-box {
-            background: white; padding: 20px; border-radius: 16px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-left: 4px solid var(--sage);
-            color: var(--text-light); line-height: 1.6; margin-bottom: 20px;
-        }
-        .info-list li { margin-bottom: 10px; padding-left: 10px; position: relative; }
-        .info-list li::before { content: "•"; color: var(--primary); position: absolute; left: -10px; font-weight: bold; }
 
         .warning-box {
-            background: var(--alert-bg); border-left: 4px solid var(--alert-text);
-            color: #8a3b3b; padding: 20px; border-radius: 16px; margin-bottom: 20px;
-        }
-        .warning-title { font-weight: 700; margin-bottom: 10px; display:flex; align-items:center; gap:10px; }
-
-        /* CHALLENGE CARDS */
-        .challenge-card {
-            background: white; border-radius: 20px; padding: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.04); margin-bottom: 15px;
-            border: 1px solid #f0f0f0; display: flex; align-items: start; gap: 15px;
-        }
-        .challenge-icon {
-            background: var(--primary-light); color: var(--primary);
-            width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
-        }
-        .challenge-text h4 { margin: 0 0 5px 0; color: #333; font-size: 1rem; }
-        .challenge-text p { margin: 0; font-size: 0.9rem; color: #666; line-height: 1.5; }
-
-        /* --- STYLES POUR LA CARTE DE PARTAGE (Social Share) --- */
-        #share-card-visual {
-            background: linear-gradient(145deg, var(--primary) 0%, #d68fa5 100%);
-            border-radius: 20px;
-            padding: 30px 20px;
-            text-align: center;
-            color: white;
-            box-shadow: 0 10px 30px rgba(176, 109, 133, 0.4);
-            margin-bottom: 20px;
-            position: relative;
-            overflow: hidden;
-            border: 2px solid rgba(255,255,255,0.3);
-        }
-        
-        /* Effet "Grain" ou texture */
-        #share-card-visual::before {
-            content: ''; position: absolute; top:0; left:0; right:0; bottom:0;
-            background: radial-gradient(circle at top right, rgba(255,255,255,0.2), transparent 70%);
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
         }
 
-        .share-title { font-family: 'Playfair Display'; font-size: 1.8rem; margin: 0 0 5px 0; text-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .share-subtitle { font-family: 'Outfit'; font-weight: 600; font-size: 0.9rem; letter-spacing: 2px; opacity: 0.9; margin-bottom: 25px; display:block; }
-        
-        .share-steps-container { background: rgba(255,255,255,0.15); border-radius: 15px; padding: 15px; backdrop-filter: blur(5px); text-align: left; }
-        .share-step-item { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; font-size: 0.95rem; }
-        .share-step-item:last-child { margin-bottom: 0; }
-        .share-step-item i { background: white; color: var(--primary); padding: 5px; border-radius: 50%; font-size: 0.8rem; }
-        
-        .share-footer { margin-top: 20px; font-size: 0.8rem; opacity: 0.8; font-weight: 300; }
-
-
-        /* QUIZ & RESULT */
-        .progress-track { background: #f0f0f0; height: 6px; border-radius: 10px; margin-bottom: 25px; }
-        .progress-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.4s ease; border-radius: 10px; }
-        .option-btn {
-            background: white; border: 2px solid transparent; padding: 16px 20px; border-radius: 20px;
-            width: 100%; text-align: left; margin-bottom: 12px; cursor: pointer; transition: all 0.2s;
-            display: flex; align-items: center; gap: 15px; color: var(--text-main);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative; overflow: hidden;
+        .tip-box {
+            background-color: #d1e7dd;
+            border-left: 5px solid #198754;
+            padding: 10px;
+            margin-top: 10px;
         }
-        .option-btn:hover { border-color: var(--primary); background: var(--primary-light); color: var(--primary-dark); }
-        .option-char {
-            background: #eee; color: #888; width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.8rem; transition: all 0.2s;
-        }
-        .option-btn:hover .option-char { background: var(--primary); color: white; }
 
-        .result-header-container { text-align: center; margin-top: -65px; position: relative; z-index: 10; }
-        .profile-img {
-            width: 120px; height: 120px; border-radius: 50%; object-fit: cover;
-            border: 6px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.1); background-color: white; display: inline-block;
-        }
-        .badge-score { display: inline-block; padding: 8px 20px; border-radius: 30px; font-weight: 700; font-size: 0.85rem; margin: 15px 0 10px 0; letter-spacing: 1px; }
-        .bg-sage { background: var(--sage-light); color: var(--sage); }
-        .bg-rose { background: var(--primary-light); color: var(--primary); }
-        .bg-gold { background: var(--gold-light); color: var(--gold); }
-        .advice-box { background: #fff; padding: 25px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
 
-        .hidden { display: none !important; }
-        .fade-in { animation: fadeIn 0.4s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-        h1, h2, h3 { margin-top: 0; }
+        /* Bouton Retour */
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Table simple */
+        table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: var(--secondary); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
 
-<div id="app-wrapper">
-    <div id="hero-img" class="hero-header">
-        <div class="hero-overlay">
-            <h1 id="header-title" class="hero-title">Mon Cocon<br>Hormonal</h1>
-        </div>
-    </div>
+    <header>
+        <h1 id="header-title">MySOPK 🌸</h1>
+    </header>
 
-    <div class="content-body">
+    <div id="home" class="page active">
+        <p>Bienvenue sur ton compagnon quotidien pour mieux vivre le SOPK.</p>
         
-        <div id="intro-screen" class="fade-in">
-            <h2 style="font-family: 'Playfair Display'; color: var(--primary); margin-bottom: 10px;">Bienvenue, belle âme 🌸</h2>
-            <p style="color: var(--text-light); line-height: 1.6;">
-                Le SOPK n'est pas une fatalité. C'est un message de ton corps. Faisons le point pour trouver ton équilibre.
-            </p>
-            <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Femme bien-être" class="intro-illustration">
-            
-            <button class="btn-base btn-primary" onclick="startQuiz()">Commencer mon bilan <i class="ph ph-arrow-right-bold"></i></button>
-            <button class="btn-base btn-outline" onclick="showInfoPage()"><i class="ph ph-book-open-text"></i> Comprendre le SOPK</button>
+        <div class="menu-grid">
+            <div class="menu-btn" onclick="showPage('nutrition')">
+                🥗 Conseils & Compléments
+            </div>
+
+            <div class="menu-btn" onclick="showPage('tabac')">
+                🚬 Tabac & Cannabis
+            </div>
+
+            <div class="menu-btn" onclick="alert('Fonctionnalité à venir !')">
+                📅 Mon Cycle
+            </div>
+            <div class="menu-btn" onclick="alert('Fonctionnalité à venir !')">
+                🧘 Gestion Stress
+            </div>
+
+            <a href="https://wa.me/33651351349" class="menu-btn whatsapp" target="_blank">
+                💬 Discussion entre filles <br><small>(Groupe WhatsApp)</small>
+            </a>
         </div>
-
-        <div id="info-screen" class="hidden fade-in">
-            <button class="btn-base btn-outline" onclick="hideInfoPage()" style="padding: 10px; width: auto; font-size: 0.9rem; border:none;">
-                <i class="ph ph-arrow-left"></i> Retour
-            </button>
-            <div class="info-section">
-                <h3><i class="ph ph-flower-lotus"></i> Qu'est-ce que le SOPK ?</h3>
-                <div class="info-box">Le Syndrome des Ovaires Polykystiques touche 1 femme sur 10. C'est un <strong>déséquilibre hormonal</strong> (souvent lié à l'insuline) qui perturbe la communication entre le cerveau et les ovaires.</div>
-            </div>
-            <div class="info-section">
-                <h3><i class="ph ph-activity"></i> Effets sur le corps</h3>
-                <div class="info-box" style="border-color: var(--gold);">
-                    <ul class="info-list" style="margin:0; padding-left:15px;">
-                        <li>Cycles irréguliers ou absents.</li>
-                        <li>Acné, pilosité excessive ou chute de cheveux.</li>
-                        <li>Prise de poids (ventre), fatigue chronique.</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="info-section">
-                <h3><i class="ph ph-sparkle"></i> Les Clés du Mieux-Être</h3>
-                <div class="info-box" style="border-color: var(--primary); background: var(--primary-light);">
-                    <ul class="info-list" style="margin:0; padding-left:15px;">
-                        <li><strong>Nutrition :</strong> Petit-déjeuner salé & Légumes en premier.</li>
-                        <li><strong>Mouvement :</strong> Activité régulière mais douce.</li>
-                        <li><strong>Mental :</strong> Réduire le stress (cortisol).</li>
-                    </ul>
-                </div>
-            </div>
-            <button class="btn-base btn-primary" onclick="startQuiz()">Faire le test maintenant</button>
-        </div>
-
-        <div id="quiz-screen" class="hidden">
-            <div class="progress-track"><div id="progress-bar" class="progress-fill"></div></div>
-            <div id="question-card" class="question-card fade-in">
-                <span id="q-category" class="category-label" style="color:var(--primary); font-weight:600; font-size:0.9rem;">Catégorie</span>
-                <h2 id="q-text" style="font-family:'Playfair Display'; margin: 15px 0 25px 0;">Question...</h2>
-                <div id="q-options"></div>
-            </div>
-        </div>
-
-        <div id="result-screen" class="hidden">
-            <div class="result-header-container">
-                <img src="" id="res-img" class="profile-img" alt="Profil">
-                <br>
-                <div id="res-badge" class="badge-score">PROFIL</div>
-                <h2 id="res-title" style="font-family: 'Playfair Display'; font-size: 1.8rem; margin: 10px 0; color: #333;">Titre</h2>
-            </div>
-            <p id="res-desc" style="text-align: center; color: var(--text-light); margin-bottom: 25px;">Description</p>
-            <div id="res-content"></div>
-            
-            <div id="challenge-btn-container"></div>
-
-            <button class="btn-base btn-alert" onclick="showSubstancePage()">
-                <i class="ph ph-warning-circle"></i> Focus : Tabac & Cannabis
-            </button>
-
-            <button class="btn-base btn-outline" onclick="location.reload()" style="border-color:#ccc; color:#666; margin-top: 10px;">
-                <i class="ph ph-arrow-counter-clockwise"></i> Refaire le test
-            </button>
-        </div>
-
-        <div id="challenge-screen" class="hidden fade-in">
-            <div style="text-align:center; margin-bottom:20px;">
-                 <h2 id="chal-title" style="font-family: 'Playfair Display'; color: var(--primary); margin:0;">Mon Challenge</h2>
-                 <p id="chal-subtitle" style="color: var(--gold); font-weight:600; font-size:0.9rem;">PROGRAMME SUR-MESURE</p>
-            </div>
-            <div class="info-box" style="margin-bottom:20px; background:var(--bg-gradient); border:none;">
-                <p id="chal-intro" style="margin:0; text-align:center; font-style:italic;">Intro challenge...</p>
-            </div>
-            <div id="chal-steps"></div>
-            
-            <button class="btn-base btn-primary" onclick="showShareScreen()">
-                <i class="ph ph-check-circle"></i> J'accepte le Challenge
-            </button>
-            
-            <button class="btn-base btn-outline" onclick="backToResult()"><i class="ph ph-arrow-left"></i> Retour</button>
-        </div>
-
-        <div id="share-screen" class="hidden fade-in">
-            <div style="text-align:center; margin-bottom:15px;">
-                <h2 style="font-family: 'Playfair Display'; color: var(--primary); margin:0;">C'est parti !</h2>
-                <p style="color: var(--text-light); font-size:0.9rem;">Capture cette carte pour te motiver</p>
-            </div>
-
-            <div id="share-card-visual">
-                <span class="share-subtitle">MON COCON SOPK</span>
-                <h3 class="share-title" id="share-card-title">Titre Challenge</h3>
-                
-                <div class="share-steps-container" id="share-card-steps">
-                    </div>
-                
-                <div class="share-footer">@moncoconsopk #SOPKChallenge</div>
-            </div>
-
-            <button class="btn-base btn-tiktok" onclick="openTikTok()">
-                <i class="ph ph-tiktok-logo" style="font-size:1.3rem;"></i> Partager sur TikTok
-            </button>
-
-            <button class="btn-base btn-outline" onclick="hideShareScreen()" style="border:none; font-size:0.9rem;">
-                Fermer
-            </button>
-        </div>
-
-        <div id="substance-screen" class="hidden fade-in">
-            <button class="btn-base btn-outline" onclick="hideSubstancePage()" style="padding: 10px; width: auto; font-size: 0.9rem; border:none;">
-                <i class="ph ph-arrow-left"></i> Retour
-            </button>
-            
-            <h2 style="font-family: 'Playfair Display'; color: var(--primary); margin-bottom: 10px;">Tabac, Cannabis & SOPK</h2>
-            <div class="warning-box">
-                <div class="warning-title"><i class="ph ph-cigarette-slash" style="font-size:1.4rem;"></i> Le Tabac</div>
-                <ul class="info-list" style="margin:0; padding-left:15px; font-size:0.95rem;">
-                    <li><strong>Androgènes :</strong> La nicotine augmente les hormones mâles (acné, poils).</li>
-                    <li><strong>Insuline :</strong> Fumer double le risque de résistance à l'insuline.</li>
-                    <li><strong>Cœur :</strong> Le SOPK fragilise déjà le cœur, le tabac aggrave le risque.</li>
-                </ul>
-            </div>
-            <div class="info-box" style="border-left-color: var(--gold);">
-                <div class="warning-title" style="color:var(--text-main);"><i class="ph ph-plant" style="font-size:1.4rem; color:var(--gold);"></i> Le Cannabis</div>
-                <ul class="info-list" style="margin:0; padding-left:15px; font-size:0.95rem;">
-                    <li><strong>Cycle Bloqué :</strong> Le THC peut bloquer l'ovulation.</li>
-                    <li><strong>Fringales :</strong> Provoque des pics d'insuline nocifs.</li>
-                </ul>
-            </div>
-        </div>
-
     </div>
-</div>
 
-<script>
-    // --- IMAGES ---
-    const images = {
-        intro: 'https://images.unsplash.com/photo-1544367563-12123d8965cd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        info: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        substance: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        food: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
-        sport: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', 
-        calm: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        resultHeader: 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        challengeHeader: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        profileA: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        profileB: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-        profileC: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
-    };
+    <div id="nutrition" class="page">
+        <span class="back-btn" onclick="showPage('home')">← Retour Accueil</span>
+        <h2>Compléments & Alimentation</h2>
 
-    const challengesData = {
-        A: { title: "Challenge Glow", subtitle: "OPTIMISATION", intro: "Cherchons l'éclat et l'énergie durable.", steps: [{icon:"ph-sun", title:"Zinc & Omega-3", desc:"Vérifie tes apports."}, {icon:"ph-person-simple-run", title:"Résistance", desc:"1 séance de musculation."}, {icon:"ph-sparkle", title:"Drainage", desc:"Massage visage le soir."}] },
-        B: { title: "Challenge Control", subtitle: "STABILISATION", intro: "Lisser la glycémie pour l'énergie.", steps: [{icon:"ph-egg", title:"7 Jours Salé", desc:"Zéro sucre au petit-dèj."}, {icon:"ph-sneaker-move", title:"Marche Active", desc:"10 min après déjeuner."}, {icon:"ph-drop", title:"Vinaigre", desc:"1 c.à.s avant repas riche."}] },
-        C: { title: "Challenge Douceur", subtitle: "PREMIERS PAS", intro: "Rassurer le corps et apaiser.", steps: [{icon:"ph-carrot", title:"Légumes First", desc:"En premier à chaque repas."}, {icon:"ph-moon-stars", title:"Sommeil", desc:"Au lit 30 min plus tôt."}, {icon:"ph-heart-break", title:"Stop Cardio", desc:"Marche douce uniquement."}] }
-    };
+        <div class="warning-box">
+            <strong>⚠️ Important :</strong> Je suis une IA. Ces conseils ne remplacent pas un avis médical. Parlez-en à votre médecin avant de prendre des suppléments.
+        </div>
 
-    const hero = document.getElementById('hero-img');
-    hero.style.backgroundImage = `url('${images.intro}')`;
+        <div class="card">
+            <h3>💊 Les 3 Compléments Stars</h3>
+            <ul>
+                <li><strong>Myo-Inositol :</strong> Pour réguler l'ovulation et la résistance à l'insuline. (Visez un ratio 40:1).</li>
+                <li><strong>Zinc (Bisglycinate) :</strong> Anti-inflammatoire, aide contre l'acné et l'hirsutisme.</li>
+                <li><strong>Vitamine D :</strong> Essentielle car souvent en carence chez les femmes SOPK.</li>
+                <li><em>Bonus : Berbérine (en cure) et Oméga-3.</em></li>
+            </ul>
+        </div>
 
-    // --- VARIABLES GLOBALES ---
-    let currentProfile = 'C';
+        <div class="card">
+            <h3>🥑 L'Assiette SOPK (IG Bas)</h3>
+            <p>Le secret ? Éviter les pics de sucre (insuline) qui perturbent les ovaires.</p>
+            <table>
+                <tr>
+                    <th>À Limiter ❌</th>
+                    <th>À Privilégier ✅</th>
+                </tr>
+                <tr>
+                    <td>Pain blanc, Riz blanc</td>
+                    <td>Pain levain/complet, Quinoa, Basmati</td>
+                </tr>
+                <tr>
+                    <td>Sucre, Soda</td>
+                    <td>Fruits entiers, Chocolat noir 70%</td>
+                </tr>
+                <tr>
+                    <td>Friture</td>
+                    <td>Huile d'olive, Avocat, Noix</td>
+                </tr>
+            </table>
+        </div>
 
-    // --- NAVIGATION ---
-    function showInfoPage() {
-        document.getElementById('intro-screen').classList.add('hidden');
-        document.getElementById('info-screen').classList.remove('hidden');
-        document.getElementById('header-title').innerText = "Comprendre";
-        hero.style.backgroundImage = `url('${images.info}')`; hero.style.height = "160px";
-    }
-    function hideInfoPage() {
-        document.getElementById('info-screen').classList.add('hidden');
-        document.getElementById('intro-screen').classList.remove('hidden');
-        document.getElementById('header-title').innerHTML = "Mon Cocon<br>Hormonal";
-        hero.style.backgroundImage = `url('${images.intro}')`; hero.style.height = "180px";
-    }
-    
-    function showSubstancePage() {
-        document.getElementById('result-screen').classList.add('hidden');
-        document.getElementById('substance-screen').classList.remove('hidden');
-        document.getElementById('header-title').innerText = "Prévention";
-        hero.style.backgroundImage = `url('${images.substance}')`; hero.style.height = "160px";
-    }
-    function hideSubstancePage() {
-        document.getElementById('substance-screen').classList.add('hidden');
-        document.getElementById('result-screen').classList.remove('hidden');
-        document.getElementById('header-title').innerText = "Tes Résultats";
-        hero.style.backgroundImage = `url('${images.resultHeader}')`; hero.style.height = "140px";
-    }
+        <div class="card">
+            <h3>⚡ 3 Astuces "Glucose Hack"</h3>
+            <ol>
+                <li><strong>Petit-déj Salé :</strong> Œufs + Avocat au lieu des céréales sucrées. Ça change tout l'énergie de la journée !</li>
+                <li><strong>Jamais de glucide "nu" :</strong> Une pomme ? Mangez 3 amandes avec. Du pain ? Mettez du fromage dessus.</li>
+                <li><strong>L'Ordre magique :</strong> Légumes en premier ➡️ Protéines ➡️ Féculents en dernier.</li>
+            </ol>
+        </div>
+    </div>
 
-    function backToResult() {
-        document.getElementById('challenge-screen').classList.add('hidden');
-        document.getElementById('result-screen').classList.remove('hidden');
-        hero.style.backgroundImage = `url('${images.resultHeader}')`;
-        document.getElementById('header-title').innerText = "Tes Résultats";
-    }
+    <div id="tabac" class="page">
+        <span class="back-btn" onclick="showPage('home')">← Retour Accueil</span>
+        <h2>Tabac & Cannabis</h2>
 
-    // --- PARTAGE SOCIAL (Nouveau) ---
-    function showShareScreen() {
-        // Préparer la carte
-        const data = challengesData[currentProfile];
-        document.getElementById('share-card-title').innerText = data.title;
-        const stepsContainer = document.getElementById('share-card-steps');
-        stepsContainer.innerHTML = '';
-        data.steps.forEach(step => {
-            stepsContainer.innerHTML += `<div class="share-step-item"><i class="ph ${step.icon}"></i> <span>${step.title}</span></div>`;
-        });
+        <div class="card">
+            <h3>🚬 Le Tabac et le SOPK</h3>
+            <p>Fumer est particulièrement nocif quand on a un SOPK :</p>
+            <ul>
+                <li><strong>Augmentation des androgènes :</strong> Le tabac stimule la production d'hormones mâles, aggravant l'acné et la pilosité.</li>
+                <li><strong>Risque Cardiovasculaire :</strong> Le SOPK augmente déjà ce risque, le tabac le multiplie.</li>
+                <li><strong>Résistance à l'insuline :</strong> La nicotine rend les cellules moins sensibles à l'insuline, ce qui favorise la prise de poids abdominale.</li>
+            </ul>
+        </div>
 
-        document.getElementById('challenge-screen').classList.add('hidden');
-        document.getElementById('share-screen').classList.remove('hidden');
-        hero.style.height = "0px"; // On cache le header pour focus sur la carte
-    }
+        <div class="card">
+            <h3>🌿 Le Cannabis</h3>
+            <p>Bien que parfois utilisé pour détendre, il a des effets cachés sur le cycle :</p>
+            <ul>
+                <li><strong>Perturbation de l'ovulation :</strong> Le THC agit sur l'hypothalamus et peut bloquer l'ovulation, rendant les cycles encore plus irréguliers.</li>
+                <li><strong>Prolactine :</strong> Peut augmenter le taux de prolactine (hormone qui, en excès, stoppe les règles).</li>
+                <li><strong>Les "Fringales" :</strong> Le cannabis stimule l'appétit (sucre/gras), ce qui est très difficile à gérer quand on a une résistance à l'insuline.</li>
+            </ul>
+            <div class="tip-box">
+                💡 <strong>Conseil :</strong> Le CBD (sans THC) peut être une alternative plus douce pour gérer l'anxiété sans les effets psychoactifs perturbateurs hormonaux.
+            </div>
+        </div>
+    </div>
 
-    function hideShareScreen() {
-        document.getElementById('share-screen').classList.add('hidden');
-        document.getElementById('challenge-screen').classList.remove('hidden');
-        hero.style.height = "160px";
-    }
+    <script>
+        // Fonction simple pour changer de page
+        function showPage(pageId) {
+            // Masquer toutes les pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
 
-    function openTikTok() {
-        // Ouvre TikTok (ou le site si pas d'app)
-        window.open('https://www.tiktok.com/', '_blank');
-    }
+            // Afficher la page demandée
+            document.getElementById(pageId).classList.add('active');
 
-    // --- QUIZ LOGIC ---
-    const questions = [
-        { category: "🍽️ Nutrition", img: images.food, text: "Ton petit-déjeuner habituel ?", options: [{text:"Salé et protéiné (ex: œufs).", val:"A"}, {text:"Tartines ou céréales 'saines'.", val:"B"}, {text:"Sucré ou rien du tout.", val:"C"}] },
-        { category: "🔋 Énergie", img: images.food, text: "Ton état après le repas de midi ?", options: [{text:"Stable, je suis bien.", val:"A"}, {text:"Léger coup de fatigue.", val:"B"}, {text:"Grosse envie de dormir/sucre.", val:"C"}] },
-        { category: "🧘‍♀️ Mouvement", img: images.sport, text: "Quelle est ta routine sport ?", options: [{text:"Régulier et doux (Pilates, muscu).", val:"A"}, {text:"Irrégulier, quand j'y pense.", val:"B"}, {text:"Intense pour 'brûler' ou sédentaire.", val:"C"}] },
-        { category: "💆‍♀️ Stress", img: images.calm, text: "Te sens-tu souvent sous pression ?", options: [{text:"Non, j'ai mes outils pour gérer.", val:"A"}, {text:"Oui, souvent stressée par le quotidien.", val:"B"}, {text:"Constamment, je rumine beaucoup.", val:"C"}] },
-        { category: "🍫 Fringales", img: images.food, text: "Tes envies de sucre sont...", options: [{text:"Rares et gérables.", val:"A"}, {text:"Présentes avant les règles (SPM).", val:"B"}, {text:"Impérieuses, surtout le soir.", val:"C"}] }
-    ];
-
-    let currentIdx = 0; let answers = { A: 0, B: 0, C: 0 };
-
-    function startQuiz() {
-        document.getElementById('intro-screen').classList.add('hidden');
-        document.getElementById('info-screen').classList.add('hidden'); 
-        document.getElementById('quiz-screen').classList.remove('hidden');
-        document.getElementById('header-title').innerText = "Le Bilan"; hero.style.height = "160px";
-        loadQuestion();
-    }
-    function loadQuestion() {
-        const q = questions[currentIdx];
-        hero.style.opacity = 0.7; setTimeout(() => { hero.style.backgroundImage = `url('${q.img}')`; hero.style.opacity = 1; }, 200);
-        document.getElementById('q-category').innerText = q.category; document.getElementById('q-text').innerText = q.text;
-        document.getElementById('progress-bar').style.width = `${((currentIdx)/questions.length)*100}%`;
-        const container = document.getElementById('q-options'); container.innerHTML = '';
-        const card = document.getElementById('question-card'); card.classList.remove('fade-in'); void card.offsetWidth; card.classList.add('fade-in');
-        q.options.forEach((opt, idx) => {
-            const btn = document.createElement('div'); btn.className = 'option-btn';
-            btn.innerHTML = `<div class="option-char">${String.fromCharCode(65+idx)}</div><span>${opt.text}</span>`;
-            btn.onclick = () => handleAnswer(opt.val); container.appendChild(btn);
-        });
-    }
-    function handleAnswer(val) { answers[val]++; currentIdx++; if (currentIdx < questions.length) loadQuestion(); else showResult(); }
-
-    function showResult() {
-        document.getElementById('quiz-screen').classList.add('hidden');
-        document.getElementById('result-screen').classList.remove('hidden');
-        hero.style.height = "140px"; hero.style.backgroundImage = `url('${images.resultHeader}')`; document.getElementById('header-title').innerText = "Tes Résultats";
-        let p = 'C'; if (answers.A >= answers.B && answers.A >= answers.C) p = 'A'; else if (answers.B >= answers.A && answers.B >= answers.C) p = 'B';
-        currentProfile = p; // Sauvegarde globale pour le partage
-        renderProfile(p);
-    }
-
-    function renderProfile(p) {
-        const img = document.getElementById('res-img'); const badge = document.getElementById('res-badge');
-        const title = document.getElementById('res-title'); const desc = document.getElementById('res-desc');
-        const content = document.getElementById('res-content');
-        const btnContainer = document.getElementById('challenge-btn-container');
-
-        btnContainer.innerHTML = `<button class="btn-base btn-challenge" onclick="startChallenge('${p}')"><i class="ph ph-lightning"></i> Découvrir mon Challenge</button>`;
-
-        if (p === 'A') {
-            img.src = images.profileA; badge.className = "badge-score bg-sage"; badge.innerText = "🌸 PROFIL HARMONIE";
-            title.innerText = "La Maîtrise Douce"; desc.innerText = "Ton hygiène de vie est un cocon protecteur.";
-            content.innerHTML = `<div class="advice-box"><h4 style="color:var(--sage); margin:0 0 10px 0;">✨ Analyse :</h4><p>Glycémie stable, corps en sécurité. C'est l'idéal pour endormir le SOPK.</p></div>`;
-        } else if (p === 'B') {
-            img.src = images.profileB; badge.className = "badge-score bg-gold"; badge.innerText = "🌟 EN TRANSITION";
-            title.innerText = "Presque à l'équilibre"; desc.innerText = "Quelques ajustements feront la différence.";
-            content.innerHTML = `<div class="advice-box"><h4 style="color:var(--primary); margin:0 0 10px 0;">🚀 Conseil :</h4><p>Concentre-toi sur le <strong>Petit-Déjeuner Salé</strong> pour stopper les fringales.</p></div>`;
-        } else {
-            img.src = images.profileC; badge.className = "badge-score bg-rose"; badge.innerText = "❤️ BESOIN DE DOUCEUR";
-            title.innerText = "Le Corps en Alerte"; desc.innerText = "L'insuline ou le stress semblent élevés.";
-            content.innerHTML = `<div class="advice-box"><h4 style="color:var(--primary); margin:0 0 10px 0;">🕊️ Premier pas :</h4><p>Commence juste par <strong>manger tes légumes en premier</strong>.</p></div>`;
+            // Scroll en haut
+            window.scrollTo(0, 0);
         }
-    }
+    </script>
 
-    function startChallenge(code) {
-        document.getElementById('result-screen').classList.add('hidden');
-        document.getElementById('challenge-screen').classList.remove('hidden');
-        hero.style.height = "160px"; hero.style.backgroundImage = `url('${images.challengeHeader}')`;
-        document.getElementById('header-title').innerText = "Action !";
-        const data = challengesData[code];
-        document.getElementById('chal-title').innerText = data.title; document.getElementById('chal-subtitle').innerText = data.subtitle; document.getElementById('chal-intro').innerText = data.intro;
-        const container = document.getElementById('chal-steps'); container.innerHTML = "";
-        data.steps.forEach(step => {
-            container.innerHTML += `<div class="challenge-card"><div class="challenge-icon"><i class="ph ${step.icon}"></i></div><div class="challenge-text"><h4>${step.title}</h4><p>${step.desc}</p></div></div>`;
-        });
-    }
-</script>
 </body>
 </html>
