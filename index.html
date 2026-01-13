@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MySOPK - App</title>
+    <title>MySOPK - Cocon</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
         :root {
-            /* Palette MySOPK */
+            /* Palette Cocon (V8) */
             --primary: #B06D85; /* Vieux Rose */
             --primary-light: #FFF0F5;
             --sage: #7D9D8A; /* Vert Sauge */
             --sage-light: #E8F3EB;
-            --gold: #D4A373; 
-            --bg-gradient: linear-gradient(135deg, #fffcfd 0%, #fff4f6 100%);
-            --card-bg: rgba(255, 255, 255, 0.98);
+            --gold: #D4A373;
+            
+            --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #fff0ec 100%);
+            --card-bg: rgba(255, 255, 255, 0.96);
             --text-main: #4A4A4A;
-            --shadow: 0 10px 30px rgba(176, 109, 133, 0.15);
-            --radius: 24px;
+            --text-light: #7a7a7a;
+            --radius: 30px;
+            --shadow: 0 20px 40px rgba(176, 109, 133, 0.15);
         }
 
         body {
@@ -28,324 +30,418 @@
             background: var(--bg-gradient);
             color: var(--text-main);
             margin: 0;
-            padding: 0;
+            padding: 15px;
             min-height: 100vh;
             display: flex;
             justify-content: center;
+            align-items: center;
         }
 
         #app-wrapper {
             width: 100%;
-            max-width: 480px;
+            max-width: 460px;
             background: var(--card-bg);
-            min-height: 100vh;
-            position: relative;
+            border-radius: var(--radius);
             box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            height: 90vh; /* Hauteur fixe pour le scroll interne */
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.6);
         }
 
-        /* --- HEADER & NAV --- */
-        header {
-            padding: 20px;
-            text-align: center;
-            background: white;
-            position: sticky; top: 0; z-index: 50;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        /* --- HEADER IMAGE (Style V8) --- */
+        .hero-header {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            transition: all 0.5s ease-in-out;
+            flex-shrink: 0;
+            background-color: var(--primary);
         }
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem; color: var(--primary);
-            font-weight: 600; letter-spacing: 1px;
+        .hero-overlay {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to top, rgba(176, 109, 133, 0.85), rgba(255,240,245,0.1));
+            display: flex; align-items: flex-end; padding: 25px;
+        }
+        .hero-title {
+            color: white; font-family: 'Playfair Display', serif;
+            font-size: 2rem; margin: 0; line-height: 1.1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
 
-        /* --- CONTENU --- */
-        .content {
+        /* --- CONTENU SCROLLABLE --- */
+        .content-body {
+            padding: 25px;
             flex: 1;
-            padding: 20px;
-            padding-bottom: 90px; /* Espace pour la bottom bar */
             overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-light) transparent;
         }
 
-        h2 { font-family: 'Playfair Display'; color: var(--primary); margin-top: 0; }
-        h3 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 10px; }
-
-        /* --- DIAGNOSTIC STYLES --- */
-        .diag-progress { height: 6px; background: #eee; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
-        .diag-bar { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; }
+        /* --- BOUTONS --- */
+        .btn-menu {
+            background: white; border: 1px solid #eee; padding: 20px;
+            border-radius: 20px; width: 100%; text-align: left;
+            margin-bottom: 15px; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+        }
+        .btn-menu:hover { transform: translateY(-3px); border-color: var(--primary); }
+        .btn-menu i { font-size: 1.5rem; color: var(--primary); background: var(--primary-light); padding: 10px; border-radius: 50%; }
         
-        .option-btn {
-            background: white; border: 1px solid #eee; padding: 15px; border-radius: 15px;
-            width: 100%; text-align: left; margin-bottom: 10px; cursor: pointer;
-            display: flex; align-items: center; gap: 10px; transition: all 0.2s;
-            font-size: 0.95rem;
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary) 0%, #c47e95 100%);
+            color: white; border: none; padding: 15px; border-radius: 50px;
+            width: 100%; font-size: 1rem; cursor: pointer; margin-top: 20px;
+            box-shadow: 0 8px 20px rgba(176, 109, 133, 0.3);
         }
-        .option-btn:hover, .option-btn.selected {
-            background: var(--primary-light); border-color: var(--primary); color: var(--primary);
+        .btn-outline {
+            background: transparent; border: 2px solid var(--primary); color: var(--primary);
+            padding: 10px 20px; border-radius: 50px; margin-top: 10px; cursor: pointer; width: 100%;
         }
 
         /* --- NUTRITION CARDS --- */
         .food-card {
             background: white; border-radius: 20px; overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 20px;
         }
         .food-img { width: 100%; height: 160px; object-fit: cover; }
         .food-content { padding: 15px; }
-        .food-tag { 
-            background: var(--sage-light); color: var(--sage); 
-            padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;
-        }
 
-        /* --- ZEN SPACE (COEUR) --- */
-        .zen-container {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            height: 100%; text-align: center;
-        }
-        
-        /* Cœur CSS avec bords diffus */
+        /* --- CŒUR ZEN DIFFUS --- */
         .heart-wrapper {
-            position: relative; width: 120px; height: 120px;
-            margin: 50px auto;
-            animation: breathe 5s infinite ease-in-out paused; /* Pausé par défaut */
+            position: relative; width: 100px; height: 100px;
+            margin: 60px auto;
+            animation: breathe 5s infinite ease-in-out paused;
         }
         .heart {
             background-color: var(--primary);
-            display: inline-block;
-            height: 120px; width: 120px;
-            position: relative; top: 0;
-            transform: rotate(-45deg);
-            /* Effet diffus */
-            box-shadow: 0 0 40px 20px rgba(176, 109, 133, 0.4); 
-            filter: blur(1px);
+            display: inline-block; height: 100px; width: 100px;
+            position: relative; transform: rotate(-45deg);
+            /* Bords diffus demandés */
+            box-shadow: 0 0 30px 15px rgba(176, 109, 133, 0.5); 
+            filter: blur(2px); 
         }
         .heart:before, .heart:after {
-            content: "";
-            background-color: var(--primary);
-            border-radius: 50%;
-            height: 120px; width: 120px;
-            position: absolute;
+            content: ""; background-color: var(--primary);
+            border-radius: 50%; height: 100px; width: 100px; position: absolute;
         }
-        .heart:before { top: -60px; left: 0; }
-        .heart:after { left: 60px; top: 0; }
-
+        .heart:before { top: -50px; left: 0; }
+        .heart:after { left: 50px; top: 0; }
+        
         .running .heart-wrapper { animation-play-state: running; }
-
         @keyframes breathe {
-            0%, 100% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 60px 30px rgba(176, 109, 133, 0.6); }
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.4); opacity: 1; box-shadow: 0 0 50px 25px rgba(176, 109, 133, 0.8); }
         }
 
-        /* --- CONSEILS / STRESS --- */
-        .advice-list { display: grid; gap: 15px; }
-        .advice-item {
-            background: white; padding: 15px; border-radius: 15px;
-            border-left: 4px solid var(--sage); display: flex; gap: 15px; align-items: start;
+        /* --- DIAGNOSTIC --- */
+        .option-btn {
+            background: white; border: 2px solid transparent; padding: 16px; border-radius: 15px;
+            width: 100%; text-align: left; margin-bottom: 10px; cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02); transition: 0.2s;
         }
-        .advice-icon { 
-            font-size: 1.5rem; color: var(--sage); background: var(--sage-light);
-            padding: 10px; border-radius: 50%;
-        }
-
-        /* --- BOTTOM BAR --- */
-        .bottom-nav {
-            position: fixed; bottom: 0; width: 100%; max-width: 480px;
-            background: white; padding: 10px 20px;
-            display: flex; justify-content: space-between;
-            border-top: 1px solid #eee; box-shadow: 0 -5px 20px rgba(0,0,0,0.02);
-            z-index: 100;
-        }
-        .nav-btn {
-            background: none; border: none;
-            display: flex; flex-direction: column; align-items: center;
-            color: #aaa; font-size: 0.75rem; cursor: pointer; gap: 4px;
-        }
-        .nav-btn i { font-size: 1.5rem; margin-bottom: 2px; }
-        .nav-btn.active { color: var(--primary); }
+        .option-btn:hover { background: var(--primary-light); border-color: var(--primary); }
+        .diag-bar { height: 6px; background: #eee; border-radius: 10px; margin-bottom: 20px; }
+        .diag-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s; border-radius: 10px; }
 
         /* UTILS */
         .hidden { display: none !important; }
-        .btn-main {
-            background: var(--primary); color: white; border: none;
-            padding: 15px 30px; border-radius: 50px; font-size: 1rem;
-            width: 100%; margin-top: 20px; cursor: pointer;
-        }
-        .btn-outline {
-            background: transparent; border: 2px solid var(--primary); color: var(--primary);
-            padding: 10px 20px; border-radius: 50px; margin-top: 10px; cursor: pointer;
-        }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h2 { font-family: 'Playfair Display'; color: var(--primary); margin-top:0; }
+        p { line-height: 1.6; }
 
     </style>
 </head>
 <body>
 
 <div id="app-wrapper">
-    <header>
-        <div class="logo">MySOPK 🌸</div>
-    </header>
-
-    <div id="main-content" class="content">
+    <div id="hero-img" class="hero-header">
+        <div class="hero-overlay">
+            <h1 id="header-title" class="hero-title">Mon Cocon<br>SOPK</h1>
         </div>
+    </div>
 
-    <nav class="bottom-nav">
-        <button class="nav-btn active" onclick="router('home')">
-            <i class="ph ph-house"></i> Accueil
-        </button>
-        <button class="nav-btn" onclick="router('diag')">
-            <i class="ph ph-clipboard-text"></i> Bilan
-        </button>
-        <button class="nav-btn" onclick="router('nutrition')">
-            <i class="ph ph-bowl-food"></i> Nutrition
-        </button>
-        <button class="nav-btn" onclick="router('stress')">
-            <i class="ph ph-brain"></i> Conseils
-        </button>
-        <button class="nav-btn" onclick="router('zen')">
-            <i class="ph ph-heart"></i> Zen
-        </button>
-    </nav>
+    <div class="content-body" id="main-container">
+        </div>
 </div>
 
-<audio id="zen-audio" loop>
-    <source src="https://cdn.pixabay.com/download/audio/2022/10/05/audio_68629e8c34.mp3" type="audio/mpeg">
-</audio>
+<audio id="audio-player" src="https://cdn.pixabay.com/download/audio/2022/08/02/audio_884fe92c21.mp3?filename=meditation-impulse-3024.mp3" preload="auto"></audio>
 
 <script>
-    // --- DONNÉES & IMAGES ---
-    const images = {
-        salmon: 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?q=80&w=1000',
-        chocolate: 'https://images.unsplash.com/photo-1606312619070-d48b706521bf?q=80&w=1000',
-        yoga: 'https://images.unsplash.com/photo-1544367563-12123d8965cd?q=80&w=1000'
+    // --- IMAGES ---
+    const imgData = {
+        home: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        food: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        salmon: 'https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        choco: 'https://images.unsplash.com/photo-1606312619070-d48b706521bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        zen: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+        diag: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
     };
 
-    // --- ETAT GLOBAL ---
-    let state = {
-        view: 'home',
-        diagAnswers: [],
-        quizDone: false
-    };
+    // --- VARIABLES ---
+    let currentView = 'home';
+    let diagAnswers = [];
+    let currentQuestion = 0;
+    let quizDuJourDone = false;
+    let isPlaying = false;
 
-    // --- ROUTER ---
-    function router(viewName) {
-        state.view = viewName;
-        // Update Nav UI
-        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-        // Simple logic to highlight nav based on view approx
-        const navMap = {'home':0, 'diag':1, 'result':1, 'nutrition':2, 'stress':3, 'zen':4};
-        if(navMap[viewName] !== undefined) document.querySelectorAll('.nav-btn')[navMap[viewName]].classList.add('active');
+    // --- INITIALISATION ---
+    const hero = document.getElementById('hero-img');
+    hero.style.backgroundImage = `url('${imgData.home}')`;
+    showHome();
 
-        render();
+    // --- NAVIGATION ---
+    function setHero(imgUrl, height = '180px', title = '') {
+        hero.style.backgroundImage = `url('${imgUrl}')`;
+        hero.style.height = height;
+        if(title) document.getElementById('header-title').innerHTML = title;
     }
 
-    // --- RENDER ENGINE ---
-    function render() {
-        const container = document.getElementById('main-content');
-        container.innerHTML = '';
-
-        if (state.view === 'home') renderHome(container);
-        else if (state.view === 'diag') renderDiagStart(container);
-        else if (state.view === 'diag-question') renderDiagQuestion(container);
-        else if (state.view === 'result') renderResult(container);
-        else if (state.view === 'nutrition') renderNutrition(container);
-        else if (state.view === 'stress') renderStress(container);
-        else if (state.view === 'zen') renderZen(container);
-    }
-
-    // --- VUES ---
-
-    // 1. HOME & QUIZ DU JOUR
-    function renderHome(container) {
+    // === VUE 1 : ACCUEIL ===
+    function showHome() {
+        setHero(imgData.home, '200px', 'Mon Cocon<br>SOPK');
+        const container = document.getElementById('main-container');
+        
         container.innerHTML = `
-            <div style="text-align:center; padding: 20px 0;">
-                <h2>Bonjour, belle âme ✨</h2>
-                <p style="color:#777;">Prête pour ta journée d'équilibre ?</p>
-            </div>
+            <div class="fade-in">
+                <h2 style="margin-bottom:5px;">Bienvenue 🌸</h2>
+                <p style="margin-bottom:25px; color:#666;">Ton espace de douceur et d'équilibre.</p>
 
-            <div class="food-card" style="background:var(--primary-light); border: 1px solid var(--primary);">
-                <div class="food-content" style="text-align:center;">
-                    <h3>📅 Le Quiz du Jour</h3>
-                    ${state.quizDone ? 
-                        `<p>✅ Bravo ! Tu as validé ton quiz aujourd'hui.</p>
-                         <button class="btn-outline" onclick="resetQuiz()">Refaire le quiz</button>` 
+                <div style="background:var(--primary-light); padding:15px; border-radius:15px; border:1px solid var(--primary); margin-bottom:25px;">
+                    <h3 style="margin:0 0 10px 0; color:var(--primary);"><i class="ph ph-sun"></i> Quiz du Jour</h3>
+                    ${quizDuJourDone ? 
+                        `<p style="font-size:0.9rem;">✅ Validé ! Bravo pour ta régularité.</p>
+                         <button style="background:none; border:none; text-decoration:underline; color:#666; cursor:pointer;" onclick="resetDailyQuiz()">Refaire</button>`
                         : 
-                        `<p>As-tu pris ton petit-déjeuner salé ce matin ?</p>
-                         <div style="display:flex; gap:10px; margin-top:15px;">
-                            <button class="btn-main" onclick="finishDailyQuiz(true)" style="background:var(--sage); margin:0;">Oui ! 🥑</button>
-                            <button class="btn-main" onclick="finishDailyQuiz(false)" style="background:#ccc; margin:0;">Pas encore</button>
+                        `<p style="font-size:0.9rem;">As-tu mangé des légumes avant ton plat ce midi ?</p>
+                         <div style="display:flex; gap:10px; margin-top:10px;">
+                            <button onclick="validateDaily(true)" style="background:var(--sage); color:white; border:none; padding:8px 15px; border-radius:20px; cursor:pointer;">Oui 🌱</button>
+                            <button onclick="validateDaily(false)" style="background:#ddd; color:#555; border:none; padding:8px 15px; border-radius:20px; cursor:pointer;">Pas encore</button>
                          </div>`
                     }
                 </div>
-            </div>
 
-            <div style="margin-top:20px;">
-                <h3>Accès Rapide</h3>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <button class="option-btn" onclick="router('zen')">🧘‍♀️ Espace Zen</button>
-                    <button class="option-btn" onclick="router('nutrition')">🥑 Idées Repas</button>
+                <div class="btn-menu" onclick="startDiag()">
+                    <i class="ph ph-clipboard-text"></i>
+                    <div>
+                        <h3 style="margin:0;">Mon Bilan Hormonal</h3>
+                        <p style="margin:0; font-size:0.8rem; color:#888;">Diagnostique complet (10 Q)</p>
+                    </div>
+                </div>
+
+                <div class="btn-menu" onclick="showNutrition()">
+                    <i class="ph ph-bowl-food"></i>
+                    <div>
+                        <h3 style="margin:0;">Nutrition & Plaisir</h3>
+                        <p style="margin:0; font-size:0.8rem; color:#888;">Recettes et aliments clés</p>
+                    </div>
+                </div>
+
+                <div class="btn-menu" onclick="showStress()">
+                    <i class="ph ph-brain"></i>
+                    <div>
+                        <h3 style="margin:0;">Gestion du Stress</h3>
+                        <p style="margin:0; font-size:0.8rem; color:#888;">Conseils sport et mental</p>
+                    </div>
+                </div>
+
+                <div class="btn-menu" onclick="showZen()">
+                    <i class="ph ph-heart"></i>
+                    <div>
+                        <h3 style="margin:0;">Espace Zen</h3>
+                        <p style="margin:0; font-size:0.8rem; color:#888;">Cohérence cardiaque & Musique</p>
+                    </div>
                 </div>
             </div>
         `;
     }
 
-    function finishDailyQuiz(val) {
-        state.quizDone = true;
-        render(); // Re-render to show success
-        if(val) alert("Super ! C'est la clé de la glycémie 🌟");
-        else alert("Pas de souci, essaye demain !");
+    function validateDaily(val) {
+        quizDuJourDone = true;
+        showHome();
+        if(val) alert("Génial ! C'est excellent pour ta glycémie.");
+        else alert("C'est ok ! Essaye ce soir, ton corps te remerciera.");
+    }
+    
+    function resetDailyQuiz() {
+        quizDuJourDone = false;
+        showHome();
     }
 
-    function resetQuiz() {
-        state.quizDone = false;
-        render();
+    // === VUE 2 : NUTRITION (Images Restaurées) ===
+    function showNutrition() {
+        setHero(imgData.food, '160px', 'Nutrition');
+        const container = document.getElementById('main-container');
+        container.innerHTML = `
+            <div class="fade-in">
+                <button class="btn-outline" style="width:auto; margin-bottom:20px;" onclick="showHome()">← Retour</button>
+                
+                <p>L'alimentation anti-inflammatoire est la clé. Voici tes deux alliés :</p>
+
+                <div class="food-card">
+                    <img src="${imgData.salmon}" class="food-img" alt="Saumon">
+                    <div class="food-content">
+                        <span style="background:var(--sage-light); color:var(--sage); padding:5px 10px; border-radius:15px; font-size:0.7rem; font-weight:bold;">OMEGA-3</span>
+                        <h3 style="margin-top:10px;">Le Bon Gras</h3>
+                        <p style="font-size:0.9rem; color:#666;">Les oméga-3 (poissons gras, lin, noix) réduisent l'inflammation et aident à l'ovulation. Ne les fuis pas !</p>
+                    </div>
+                </div>
+
+                <div class="food-card">
+                    <img src="${imgData.choco}" class="food-img" alt="Chocolat">
+                    <div class="food-content">
+                        <span style="background:#FFF0F5; color:var(--primary); padding:5px 10px; border-radius:15px; font-size:0.7rem; font-weight:bold;">PLAISIR</span>
+                        <h3 style="margin-top:10px;">Chocolat Noir 85%</h3>
+                        <p style="font-size:0.9rem; color:#666;">Riche en magnésium et pauvre en sucre. Un carré après le repas coupe l'envie de sucre sans pic d'insuline.</p>
+                    </div>
+                </div>
+                
+                <div style="background:white; padding:15px; border-radius:15px; border-left:4px solid var(--sage);">
+                    <strong>🥑 La Règle d'Or :</strong> Petit-déjeuner salé (Oeufs, fromage, avocat) impératif pour éviter la fatigue de 11h.
+                </div>
+            </div>
+        `;
     }
 
-    // 2. DIAGNOSTIC COMPLET (10 Questions)
-    const diagQuestions = [
-        { q: "Tes cycles menstruels sont-ils réguliers ?", opts: ["Oui, comme une horloge", "Variables (quelques jours)", "Très irréguliers ou absents"] },
-        { q: "Comment qualifierais-tu ton niveau d'énergie après le repas ?", opts: ["Stable", "Petit coup de mou", "Grosse fatigue / Envie de dormir"] },
-        { q: "As-tu de l'acné (visage, dos) ?", opts: ["Jamais ou rarement", "Parfois (avant les règles)", "Oui, persistante et kystique"] },
-        { q: "Constates-tu une pilosité excessive (visage, ventre) ?", opts: ["Non", "Un petit duvet", "Oui, c'est un complexe (Hirsutisme)"] },
-        { q: "Perds-tu tes cheveux plus que la normale ?", opts: ["Non", "Un peu aux changements de saison", "Oui, perte diffuse ou golfes"] },
-        { q: "Où stockes-tu le poids principalement ?", opts: ["Réparti équitablement", "Hanches et cuisses", "Ventre / Abdomen"] },
-        { q: "As-tu des fringales de sucre incontrôlables ?", opts: ["Non", "Parfois", "Oui, souvent vers 17h ou le soir"] },
-        { q: "Ton niveau de stress actuel sur 10 ?", opts: ["Zen (0-3)", "Modéré (4-7)", "Intense (8-10)"] },
-        { q: "As-tu des antécédents de diabète dans la famille ?", opts: ["Non", "Je ne sais pas", "Oui (Parents/Grands-parents)"] },
-        { q: "Comment est ta digestion ?", opts: ["Normale", "Ballonnements parfois", "Souvent gonflée après les repas"] }
+    // === VUE 3 : STRESS & CONSEILS ===
+    function showStress() {
+        setHero(imgData.home, '160px', 'Sérénité');
+        const container = document.getElementById('main-container');
+        container.innerHTML = `
+            <div class="fade-in">
+                <button class="btn-outline" style="width:auto; margin-bottom:20px;" onclick="showHome()">← Retour</button>
+                
+                <h2>Le Cortisol : L'Ennemi</h2>
+                <p>Le stress chronique bloque l'ovulation. Voici comment l'apaiser :</p>
+
+                <div class="btn-menu" style="cursor:default;">
+                    <i class="ph ph-sneaker-move"></i>
+                    <div>
+                        <h3 style="margin:0;">Le Sport Adapté</h3>
+                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">
+                            ✅ <strong>Oui :</strong> Musculation, Pilates, Marche (lisse la glycémie).<br>
+                            ❌ <strong>Non :</strong> Cardio intense / HIIT tous les jours (augmente le stress).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="btn-menu" style="cursor:default;">
+                    <i class="ph ph-moon-stars"></i>
+                    <div>
+                        <h3 style="margin:0;">Sommeil Sacré</h3>
+                        <p style="font-size:0.9rem; color:#666; margin-top:5px;">
+                            Dormir moins de 7h augmente la résistance à l'insuline le lendemain. Coupez les écrans à 22h.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    // === VUE 4 : ZEN (AUDIO FIXÉ + CŒUR DIFFUS) ===
+    function showZen() {
+        setHero(imgData.zen, '160px', 'Espace Zen');
+        const container = document.getElementById('main-container');
+        container.innerHTML = `
+            <div class="fade-in" style="text-align:center;">
+                <button class="btn-outline" style="width:auto; margin-bottom:10px;" onclick="stopAndHome()">← Retour</button>
+                
+                <h2>Cohérence Cardiaque</h2>
+                <p style="font-size:0.9rem;">Inspire quand le cœur grandit,<br>Expire quand il rétrécit.</p>
+
+                <div id="zen-anim" class="heart-wrapper">
+                    <div class="heart"></div>
+                </div>
+
+                <button id="btn-play" class="btn-main" onclick="toggleAudio()">
+                    <i class="ph ph-play"></i> Lancer la séance (avec musique)
+                </button>
+                <p id="audio-status" style="font-size:0.8rem; color:#999; margin-top:10px;">Le son peut prendre quelques secondes...</p>
+            </div>
+        `;
+        isPlaying = false; // Reset state
+    }
+
+    function toggleAudio() {
+        const audio = document.getElementById('audio-player');
+        const btn = document.getElementById('btn-play');
+        const anim = document.getElementById('zen-anim');
+        const status = document.getElementById('audio-status');
+
+        if (!isPlaying) {
+            // PLAY
+            audio.play()
+                .then(() => {
+                    status.innerText = "Musique en cours... 🎵";
+                })
+                .catch(error => {
+                    console.log(error);
+                    status.innerText = "⚠️ Erreur audio (bloqué par le navigateur ?)";
+                });
+            
+            anim.classList.add('running');
+            btn.innerHTML = '<i class="ph ph-pause"></i> Pause';
+            btn.style.background = "#aaa";
+            isPlaying = true;
+        } else {
+            // PAUSE
+            audio.pause();
+            anim.classList.remove('running');
+            btn.innerHTML = '<i class="ph ph-play"></i> Reprendre';
+            btn.style.background = "linear-gradient(135deg, var(--primary) 0%, #c47e95 100%)";
+            status.innerText = "Pause";
+            isPlaying = false;
+        }
+    }
+
+    function stopAndHome() {
+        const audio = document.getElementById('audio-player');
+        audio.pause();
+        audio.currentTime = 0;
+        showHome();
+    }
+
+
+    // === VUE 5 : DIAGNOSTIC (10 QUESTIONS) ===
+    const diagData = [
+        {q:"Tes cycles sont-ils réguliers ?", opts:["Oui, réguliers","Variables","Absents ou très longs"]},
+        {q:"Ton énergie après déjeuner ?", opts:["Normale","Petit coup de mou","Enorme fatigue"]},
+        {q:"As-tu de l'acné ?", opts:["Non","Un peu (cycle)","Oui, persistante"]},
+        {q:"Pilosité (visage/corps) ?", opts:["Normale","Un léger duvet","Excessive (Hirsutisme)"]},
+        {q:"Perte de cheveux ?", opts:["Non","Saisonnière","Oui, importante"]},
+        {q:"Où stockes-tu le poids ?", opts:["Partout","Hanches","Ventre/Estomac"]},
+        {q:"Fringales de sucre ?", opts:["Jamais","Parfois","Souvent/Impérieuses"]},
+        {q:"Niveau de stress (0-10) ?", opts:["Zen (0-4)","Moyen (5-7)","Haut (8-10)"]},
+        {q:"Diabète dans la famille ?", opts:["Non","Je ne sais pas","Oui"]},
+        {q:"Digestion ?", opts:["Bonne","Ballonnements","Difficile"]}
     ];
 
-    let currentQIdx = 0;
-
-    function renderDiagStart(container) {
-        container.innerHTML = `
-            <div style="text-align:center;">
-                <img src="https://cdn-icons-png.flaticon.com/512/3209/3209079.png" width="80" style="margin-bottom:20px;">
-                <h2>Bilan Professionnel</h2>
-                <p>Ce questionnaire de <strong>10 questions</strong> analyse tes symptômes (cycles, peau, métabolisme) pour définir ton profil dominant.</p>
-                <div style="background:#fff3cd; padding:10px; border-radius:10px; font-size:0.8rem; margin: 20px 0;">
-                    ⚠️ Ceci est un outil éducatif, pas un diagnostic médical.
-                </div>
-                <button class="btn-main" onclick="startDiag()">Commencer l'analyse</button>
-            </div>
-        `;
-    }
-
     function startDiag() {
-        currentQIdx = 0;
-        state.diagAnswers = [];
-        router('diag-question');
+        currentQuestion = 0;
+        diagAnswers = [];
+        setHero(imgData.diag, '160px', 'Bilan');
+        showQuestion();
     }
 
-    function renderDiagQuestion(container) {
-        const q = diagQuestions[currentQIdx];
-        const progress = ((currentQIdx + 1) / diagQuestions.length) * 100;
-        
+    function showQuestion() {
+        const container = document.getElementById('main-container');
+        const q = diagData[currentQuestion];
+        const pct = ((currentQuestion+1) / diagData.length) * 100;
+
         container.innerHTML = `
-            <div class="diag-progress"><div class="diag-bar" style="width:${progress}%"></div></div>
-            <h3>Question ${currentQIdx + 1}/${diagQuestions.length}</h3>
-            <h2 style="font-size:1.4rem; margin-bottom:30px;">${q.q}</h2>
-            <div>
+            <div class="fade-in">
+                <div class="diag-bar"><div class="diag-fill" style="width:${pct}%"></div></div>
+                <p style="color:#999; font-size:0.8rem; margin-bottom:5px;">Question ${currentQuestion+1}/${diagData.length}</p>
+                <h2 style="font-size:1.4rem; margin-bottom:25px;">${q.q}</h2>
+                
                 ${q.opts.map((opt, idx) => `
-                    <button class="option-btn" onclick="answerDiag(${idx})">
-                        <div style="background:#eee; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem;">${String.fromCharCode(65+idx)}</div>
+                    <button class="option-btn" onclick="nextQuestion(${idx})">
+                        <span style="background:#eee; width:25px; height:25px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; margin-right:10px; font-size:0.8rem;">${String.fromCharCode(65+idx)}</span>
                         ${opt}
                     </button>
                 `).join('')}
@@ -353,185 +449,58 @@
         `;
     }
 
-    function answerDiag(val) {
-        state.diagAnswers.push(val); // 0=A, 1=B, 2=C
-        if (currentQIdx < diagQuestions.length - 1) {
-            currentQIdx++;
-            render();
+    function nextQuestion(val) {
+        diagAnswers.push(val);
+        if (currentQuestion < diagData.length - 1) {
+            currentQuestion++;
+            showQuestion();
         } else {
-            router('result');
+            showDiagResult();
         }
     }
 
-    function renderResult(container) {
-        // Calcul simple : majorité de C = Inflammation/Insuline
-        const counts = {0:0, 1:0, 2:0};
-        state.diagAnswers.forEach(a => counts[a]++);
+    function showDiagResult() {
+        const container = document.getElementById('main-container');
+        // Calcul simple : Si beaucoup de réponses C (index 2) ou B (index 1)
+        let scoreC = diagAnswers.filter(x => x === 2).length;
+        let scoreB = diagAnswers.filter(x => x === 1).length;
         
-        let profile = "Équilibré";
-        let desc = "Tes symptômes semblent sous contrôle.";
-        
-        if (counts[2] >= 3) {
-            profile = "Profil Inflammatoire / Résistant";
-            desc = "Tes réponses indiquent une probable résistance à l'insuline et une inflammation. C'est la cause racine de la majorité des SOPK.";
-        } else if (counts[1] >= 4) {
-            profile = "Profil Mixte / Stress";
-            desc = "Tu es en transition. Le stress et quelques écarts glycémiques impactent tes hormones.";
+        let titre = "Profil Équilibré";
+        let msg = "Tes symptômes semblent sous contrôle. Continue tes bonnes habitudes !";
+        let color = "var(--sage)";
+
+        if (scoreC >= 3) {
+            titre = "Profil Inflammatoire";
+            msg = "Tes réponses indiquent une possible résistance à l'insuline. C'est le moteur principal du SOPK.";
+            color = "var(--primary)";
+        } else if (scoreB >= 4) {
+            titre = "Profil Mixte / Stress";
+            msg = "Tu es en zone grise. Le stress et de petits déséquilibres alimentaires perturbent ton cycle.";
+            color = "var(--gold)";
         }
 
         container.innerHTML = `
-            <div style="text-align:center;">
-                <h2>Ton Résultat</h2>
-                <div style="background:var(--primary); color:white; padding:10px 20px; border-radius:50px; display:inline-block; margin-bottom:15px;">
-                    ${profile}
+            <div class="fade-in" style="text-align:center;">
+                <h2 style="margin-bottom:10px;">Ton Résultat</h2>
+                <div style="background:${color}; color:white; padding:10px 25px; border-radius:30px; display:inline-block; font-weight:bold; margin-bottom:20px;">
+                    ${titre}
                 </div>
-                <p>${desc}</p>
-                <hr style="border:0; border-top:1px solid #eee; margin:20px 0;">
+                <p style="margin-bottom:30px;">${msg}</p>
                 
-                <h3>Recommandations Immédiates :</h3>
-                <ul style="text-align:left; color:#555; line-height:1.6;">
-                    <li>🎯 <strong>Priorité :</strong> Stabiliser ta glycémie (voir menu Nutrition).</li>
-                    <li>💊 <strong>Compléments :</strong> Parles-en à ton médecin (Inositol, Magnésium).</li>
-                    <li>🩸 <strong>Analyses :</strong> Vérifier Taux Insuline à jeun et Testostérone.</li>
-                </ul>
+                <div style="text-align:left; background:white; padding:20px; border-radius:20px; border-left:4px solid ${color}; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                    <h3 style="margin-top:0;">Nos conseils pro :</h3>
+                    <ul style="padding-left:20px; color:#555; line-height:1.6;">
+                        <li>Privilégie le <strong>petit-déjeuner salé</strong>.</li>
+                        <li>Intègre 10 min de marche après les repas.</li>
+                        <li>Parles-en à ton médecin (Bilan sanguin).</li>
+                    </ul>
+                </div>
 
-                <button class="btn-main" onclick="router('nutrition')">Voir le plan d'action Nutrition</button>
-                <button class="btn-outline" onclick="startDiag()">Refaire le test</button>
+                <button class="btn-main" onclick="showNutrition()">Voir le plan Nutrition</button>
+                <button class="btn-outline" onclick="showHome()">Retour Accueil</button>
             </div>
         `;
     }
-
-    // 3. NUTRITION (RESTAURÉE AVEC IMAGES)
-    function renderNutrition(container) {
-        container.innerHTML = `
-            <h2>L'Assiette SOPK 🥑</h2>
-            <p>L'alimentation est ton premier médicament. Voici les piliers pour réduire les androgènes.</p>
-
-            <div class="food-card">
-                <img src="${images.salmon}" class="food-img" alt="Saumon">
-                <div class="food-content">
-                    <span class="food-tag">OMEGA-3</span>
-                    <h3 style="margin-top:10px;">Le Gras, c'est la Vie !</h3>
-                    <p style="font-size:0.9rem; color:#666;">Contrairement aux idées reçues, le bon gras (saumon, avocat, huile d'olive) est essentiel pour fabriquer des hormones saines.</p>
-                </div>
-            </div>
-
-            <div class="food-card">
-                <img src="${images.chocolate}" class="food-img" alt="Chocolat">
-                <div class="food-content">
-                    <span class="food-tag">PLAISIR & MAGNÉSIUM</span>
-                    <h3 style="margin-top:10px;">Chocolat Noir 85%</h3>
-                    <p style="font-size:0.9rem; color:#666;">Riche en magnésium (anti-stress) et pauvre en sucre. 2 carrés par jour sont excellents pour le moral et le SOPK.</p>
-                </div>
-            </div>
-
-            <div class="advice-list">
-                <div class="advice-item">
-                    <div class="advice-icon">🥗</div>
-                    <div>
-                        <strong>Ordre des aliments</strong>
-                        <p style="margin:0; font-size:0.85rem;">Fibres en premier, puis protéines, puis féculents. Cela lisse la courbe de sucre.</p>
-                    </div>
-                </div>
-                <div class="advice-item">
-                    <div class="advice-icon">🍳</div>
-                    <div>
-                        <strong>Petit-Déjeuner Salé</strong>
-                        <p style="margin:0; font-size:0.85rem;">Impératif. Œufs, jambon ou fromage. Évite le sucre au réveil.</p>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    // 4. GESTION DU STRESS (COMPLÉTÉE)
-    function renderStress(container) {
-        container.innerHTML = `
-            <h2>Gestion du Stress 🧠</h2>
-            <p>Le Cortisol est l'ennemi de la Progestérone. Il faut l'abaisser pour ovuler.</p>
-
-            <div class="advice-list" style="margin-top:20px;">
-                <div class="advice-item">
-                    <div class="advice-icon">🏃‍♀️</div>
-                    <div>
-                        <strong>Le Sport Adapté</strong>
-                        <p style="margin:5px 0 0 0; font-size:0.9rem;">
-                            <strong>À faire :</strong> Renforcement musculaire (poids), Pilates, Yoga, Marche.
-                            <br><span style="color:var(--primary); font-size:0.8rem;">Pourquoi ?</span> Le muscle consomme le glucose sans stresser le corps.
-                            <br><strong>À éviter :</strong> Cardio intense (HIIT) tous les jours (augmente le cortisol).
-                        </p>
-                    </div>
-                </div>
-
-                <div class="advice-item">
-                    <div class="advice-icon">💤</div>
-                    <div>
-                        <strong>Le Sommeil</strong>
-                        <p style="margin:5px 0 0 0; font-size:0.9rem;">
-                            Vise 7h à 8h. Le manque de sommeil augmente la résistance à l'insuline le lendemain de 30% !
-                            <br><em>Astuce :</em> Arrête les écrans 1h avant de dormir.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="advice-item">
-                    <div class="advice-icon">🌿</div>
-                    <div>
-                        <strong>Suppléments Naturels</strong>
-                        <p style="margin:5px 0 0 0; font-size:0.9rem;">
-                            L'Ashwagandha et la Rhodiola sont des plantes adaptogènes qui aident le corps à résister au stress.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        `;
-    }
-
-    // 5. ESPACE ZEN (CŒUR + AUDIO FIX)
-    let isPlaying = false;
-    
-    function renderZen(container) {
-        container.innerHTML = `
-            <div class="zen-container">
-                <h2>Cohérence Cardiaque</h2>
-                <p>Inspire quand le cœur grandit,<br>Expire quand il rétrécit.</p>
-                
-                <div id="heart-anim" class="heart-wrapper">
-                    <div class="heart"></div>
-                </div>
-
-                <button id="zen-btn" class="btn-main" onclick="toggleZen()">Lancer la séance (5 min)</button>
-                <p style="font-size:0.8rem; color:#999; margin-top:15px;">Le son aide à la relaxation 🎵</p>
-            </div>
-        `;
-        // Reset state visual if returning to view
-        isPlaying = false;
-    }
-
-    function toggleZen() {
-        const audio = document.getElementById('zen-audio');
-        const wrapper = document.getElementById('heart-anim');
-        const btn = document.getElementById('zen-btn');
-
-        if (!isPlaying) {
-            // PLAY
-            audio.play().catch(e => alert("Le navigateur a bloqué le son. Réessayez."));
-            wrapper.classList.add('running');
-            btn.innerText = "Arrêter / Pause";
-            btn.style.background = "#aaa";
-            isPlaying = true;
-        } else {
-            // PAUSE
-            audio.pause();
-            wrapper.classList.remove('running');
-            btn.innerText = "Reprendre";
-            btn.style.background = "var(--primary)";
-            isPlaying = false;
-        }
-    }
-
-    // Initial render
-    render();
 
 </script>
 </body>
