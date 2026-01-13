@@ -7,8 +7,9 @@
     <style>
         :root {
             --primary: #d63384; /* Rose SOPK */
+            --primary-dark: #b02a6c;
             --primary-light: #f8d7da;
-            --accent: #20c997; /* Vert menthe pour le bien-être */
+            --accent: #20c997; /* Vert menthe */
             --bg: #fff0f3;
             --text: #4a4a4a;
             --card-bg: #ffffff;
@@ -22,22 +23,86 @@
             margin: 0;
             padding: 0;
             line-height: 1.6;
-            padding-bottom: 60px; /* Espace pour le footer */
+            padding-bottom: 60px;
+            overflow-x: hidden; /* Empêche le scroll horizontal */
         }
 
         /* --- HEADER & NAVIGATION --- */
         header {
-            background: linear-gradient(135deg, var(--primary), #b02a6c);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 25px 20px;
+            padding: 20px;
             text-align: center;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
             box-shadow: 0 4px 10px rgba(214, 51, 132, 0.3);
+            position: relative;
+            z-index: 100;
         }
 
         h1 { margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
         .subtitle { font-size: 0.9rem; opacity: 0.9; margin-top: 5px; }
+
+        /* --- MENU BURGER (SIDEBAR) --- */
+        .menu-toggle {
+            position: absolute;
+            top: 25px;
+            right: 20px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: white;
+            z-index: 102;
+        }
+
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 200;
+            top: 0;
+            right: 0;
+            background-color: var(--primary-dark);
+            overflow-x: hidden;
+            transition: 0.4s;
+            padding-top: 60px;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.2);
+        }
+
+        .sidenav a {
+            padding: 15px 30px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            color: white;
+            display: block;
+            transition: 0.3s;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidenav a:hover {
+            background-color: rgba(255,255,255,0.1);
+            padding-right: 40px; /* Petit effet de mouvement */
+        }
+
+        .sidenav .closebtn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 36px;
+            margin-left: 50px;
+            border: none;
+        }
+
+        /* Overlay sombre quand le menu est ouvert */
+        #overlay-bg {
+            display: none;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 150;
+        }
 
         /* --- PAGE SYSTEM --- */
         .page {
@@ -49,7 +114,7 @@
         }
         .page.active { display: block; }
 
-        /* --- HOME MENU (GRID WITH IMAGES) --- */
+        /* --- HOME MENU (GRID) --- */
         .menu-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -67,22 +132,10 @@
             text-align: center;
             border: 1px solid rgba(0,0,0,0.05);
         }
-
         .menu-card:hover { transform: translateY(-5px); }
-
-        .card-img {
-            height: 100px;
-            width: 100%;
-            object-fit: cover;
-            background-color: #eee;
-        }
-
-        .card-title {
-            padding: 15px 10px;
-            font-weight: bold;
-            color: var(--primary);
-            font-size: 0.95rem;
-        }
+        
+        .card-img { height: 100px; width: 100%; object-fit: cover; background-color: #eee; }
+        .card-title { padding: 15px 10px; font-weight: bold; color: var(--primary); font-size: 0.95rem; }
 
         /* --- BOUTON WHATSAPP --- */
         .wa-btn {
@@ -96,9 +149,11 @@
             text-decoration: none;
             font-weight: bold;
             box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            transition: transform 0.2s;
         }
+        .wa-btn:active { transform: scale(0.98); }
 
-        /* --- CONTENU GENERIQUE --- */
+        /* --- ELEMENTS UI --- */
         h2 { color: var(--primary); border-bottom: 2px solid var(--primary-light); padding-bottom: 5px; margin-top: 0; }
         .back-btn { 
             display: inline-block; margin-bottom: 20px; color: #666; 
@@ -108,83 +163,63 @@
             background: white; padding: 20px; border-radius: 15px;
             margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
-
-        /* --- CYCLE TRACKER --- */
-        .cycle-input-group {
-            display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;
-        }
-        input[type="date"] {
-            padding: 10px; border-radius: 8px; border: 1px solid #ddd;
-        }
         button.action-btn {
             background-color: var(--primary); color: white; border: none;
-            padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;
+            padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold;
+            font-size: 1rem; width: 100%; margin-top: 10px;
         }
+
+        /* --- CYCLE & GRAPH --- */
+        .cycle-input-group { display: flex; gap: 10px; justify-content: center; margin-bottom: 20px; }
+        input[type="date"] { padding: 10px; border-radius: 8px; border: 1px solid #ddd; width: 60%; }
         
-        /* Graphique des cycles */
-        .cycle-graph-container {
-            margin-top: 20px;
-            padding: 10px;
-            background: #fafafa;
-            border-radius: 10px;
-        }
-        .bar-container {
-            display: flex; align-items: center; margin-bottom: 8px;
-        }
+        .bar-container { display: flex; align-items: center; margin-bottom: 8px; }
         .bar-label { width: 80px; font-size: 0.8rem; color: #666; }
         .bar-visual {
-            height: 25px;
-            background: linear-gradient(90deg, var(--primary-light), var(--primary));
-            border-radius: 5px;
-            display: flex; align-items: center; justify-content: flex-end;
-            padding-right: 10px; color: white; font-size: 0.8rem; font-weight: bold;
-            transition: width 0.5s ease;
-            min-width: 30px;
+            height: 25px; background: linear-gradient(90deg, var(--primary-light), var(--primary));
+            border-radius: 5px; display: flex; align-items: center; justify-content: flex-end;
+            padding-right: 10px; color: white; font-size: 0.8rem; font-weight: bold; min-width: 30px;
         }
-        .avg-display { text-align: center; font-size: 1.2rem; margin: 20px 0; color: var(--accent); font-weight: bold; }
 
         /* --- STRESS SLIDER --- */
         .slider-container { text-align: center; margin: 30px 0; }
-        input[type=range] {
-            width: 100%; height: 10px; border-radius: 5px; background: #ddd; outline: none;
-        }
-        input[type=range]::-webkit-slider-thumb {
-            -webkit-appearance: none; appearance: none;
-            width: 25px; height: 25px; border-radius: 50%; 
-            background: var(--accent); cursor: pointer;
-        }
+        input[type=range] { width: 100%; height: 10px; border-radius: 5px; background: #ddd; outline: none; -webkit-appearance: none; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 25px; height: 25px; border-radius: 50%; background: var(--accent); cursor: pointer; }
         .stress-emoji { font-size: 3rem; margin-bottom: 10px; display: block; }
-        .stress-advice { 
-            background: #e6fffa; padding: 15px; border-radius: 10px; border-left: 5px solid var(--accent);
-            display: none; 
-        }
+        .stress-advice { background: #e6fffa; padding: 15px; border-radius: 10px; border-left: 5px solid var(--accent); display: none; }
 
-        /* --- QUIZ & DIAGNOSTIC --- */
+        /* --- QUIZ --- */
         .quiz-option, .diag-option {
             display: block; width: 100%; padding: 12px; margin: 8px 0;
             background: #f8f9fa; border: 1px solid #ddd; border-radius: 8px;
             text-align: left; cursor: pointer;
         }
-        .quiz-option:hover, .diag-option:hover { background: var(--primary-light); }
         .correct { background-color: #d1e7dd !important; border-color: #badbcc; }
         .wrong { background-color: #f8d7da !important; border-color: #f5c2c7; }
-        
-        .result-box {
-            text-align: center; padding: 20px; background: white; border-radius: 15px; 
-            margin-top: 20px; display: none;
-        }
+        .result-box { text-align: center; padding: 20px; background: white; border-radius: 15px; margin-top: 20px; display: none; }
 
-        /* --- FOOTER --- */
-        footer {
-            text-align: center; font-size: 0.8rem; color: #888; margin-top: 40px; padding: 20px;
-        }
+        footer { text-align: center; font-size: 0.8rem; color: #888; margin-top: 40px; padding: 20px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
+    <div id="overlay-bg" onclick="closeNav()"></div>
+
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <a onclick="navTo('home')">🏠 Accueil</a>
+        <a onclick="navTo('nutrition')">🥗 Nutrition</a>
+        <a onclick="navTo('cycle')">📅 Mon Cycle</a>
+        <a onclick="navTo('stress')">🧘 Gestion Stress</a>
+        <a onclick="navTo('tabac')">🚭 Tabac & Cannabis</a>
+        <a onclick="navTo('quiz')">❓ Quiz</a>
+        <a onclick="navTo('diagnostic')">🧐 Mon Diagnostic</a>
+    </div>
+
     <header>
+        <div class="menu-toggle" onclick="openNav()">☰</div>
         <h1 onclick="showPage('home')" style="cursor:pointer">MySOPK 🌸</h1>
         <div class="subtitle">Ton espace de douceur et de conseils</div>
     </header>
@@ -224,7 +259,7 @@
             </div>
         </div>
 
-        <a href="https://chat.whatsapp.com/votre_lien_d_invitation_ici" class="wa-btn" target="_blank">
+        <a href="https://chat.whatsapp.com/Eiqg0o4Yte6DaO4xxWoRRN" class="wa-btn" target="_blank">
             💬 Rejoindre le groupe "MySOPK" <br><small>(Discussion entre filles sur WhatsApp)</small>
         </a>
     </div>
@@ -233,187 +268,112 @@
         <span class="back-btn" onclick="showPage('home')">← Retour Accueil</span>
         <h2>Mon Diagnostic Préliminaire</h2>
         <div class="section-card">
-            <p>Réponds sincèrement à ces 3 questions pour évaluer tes risques.</p>
+            <p>Réponds sincèrement pour évaluer tes risques.</p>
             
-            <p><strong>1. Tes cycles sont-ils irréguliers ?</strong> (Plus de 35 jours, ou absence de règles)</p>
+            <p><strong>1. Cycles irréguliers ?</strong> (Plus de 35j ou absence)</p>
             <button class="diag-option" onclick="setDiag(1, 1)">Oui</button>
             <button class="diag-option" onclick="setDiag(1, 0)">Non</button>
 
-            <p><strong>2. As-tu de l'acné persistante ou une pilosité excessive (visage, ventre) ?</strong></p>
+            <p><strong>2. Acné ou pilosité excessive ?</strong></p>
             <button class="diag-option" onclick="setDiag(2, 1)">Oui</button>
             <button class="diag-option" onclick="setDiag(2, 0)">Non</button>
 
-            <p><strong>3. As-tu du mal à perdre du poids malgré tes efforts ?</strong></p>
+            <p><strong>3. Difficulté à perdre du poids ?</strong></p>
             <button class="diag-option" onclick="setDiag(3, 1)">Oui</button>
             <button class="diag-option" onclick="setDiag(3, 0)">Non</button>
 
-            <button class="action-btn" style="width:100%; margin-top:15px;" onclick="calculateDiag()">Voir mon résultat</button>
+            <button class="action-btn" onclick="calculateDiag()">Voir mon résultat</button>
         </div>
-
         <div id="diag-result" class="result-box"></div>
     </div>
 
     <div id="cycle" class="page">
         <span class="back-btn" onclick="showPage('home')">← Retour Accueil</span>
         <h2>Mon Suivi de Cycle 📅</h2>
-        
         <div class="section-card" style="text-align: center;">
-            <p>Déclare le <strong>premier jour</strong> de tes règles :</p>
+            <p>Déclare le <strong>1er jour</strong> de tes règles :</p>
             <div class="cycle-input-group">
                 <input type="date" id="cycle-date">
-                <button class="action-btn" onclick="addCycle()">Ajouter</button>
+                <button class="action-btn" style="width:auto; margin-top:0;" onclick="addCycle()">Ajouter</button>
             </div>
-            <small>Les données sont stockées uniquement dans ton téléphone.</small>
         </div>
 
         <div class="section-card">
             <h3>Historique & Graphique</h3>
             <div id="avg-cycle" class="avg-display">-- jours en moyenne</div>
-            <div id="cycle-graph" class="cycle-graph-container">
-                <p style="text-align:center; color:#999;">Ajoute au moins 2 dates pour voir le graphique.</p>
-            </div>
-            <button onclick="clearCycles()" style="background:none; border:none; color:red; font-size:0.8rem; margin-top:10px; text-decoration:underline;">Effacer l'historique</button>
+            <div id="cycle-graph" class="cycle-graph-container"></div>
+            <button onclick="clearCycles()" style="background:none; border:none; color:red; margin-top:10px; text-decoration:underline;">Effacer l'historique</button>
         </div>
     </div>
 
     <div id="stress" class="page">
         <span class="back-btn" onclick="showPage('home')">← Retour Accueil</span>
         <h2>Thermomètre du Stress 🧘‍♀️</h2>
-        
         <div class="section-card">
-            <p>Comment te sens-tu aujourd'hui ? (0 = Zen, 10 = Panique)</p>
+            <p>Ton niveau de stress (0 à 10) :</p>
             <div class="slider-container">
                 <span id="emoji-display" class="stress-emoji">😐</span>
                 <input type="range" id="stress-range" min="0" max="10" value="5" oninput="updateStress(this.value)">
                 <p>Niveau : <strong id="stress-val">5</strong>/10</p>
             </div>
         </div>
-
-        <div id="advice-low" class="stress-advice">
-            <strong>✅ Tout va bien !</strong><br>
-            C'est le moment idéal pour capitaliser sur ce calme.
-            <ul>
-                <li>Fais une activité créative.</li>
-                <li>Prépare tes repas de la semaine (Meal Prep).</li>
-            </ul>
-        </div>
-
-        <div id="advice-mid" class="stress-advice">
-            <strong>⚠️ Zone de turbulence</strong><br>
-            Le cortisol commence à monter, attention à l'insuline !
-            <ul>
-                <li>Prends du <strong>Magnésium</strong> ce soir.</li>
-                <li>Fais 5 minutes de <strong>cohérence cardiaque</strong> (inspire 5s, expire 5s).</li>
-                <li>Évite le café après 14h.</li>
-            </ul>
-        </div>
-
-        <div id="advice-high" class="stress-advice">
-            <strong>🚨 Alerte Rouge</strong><br>
-            Ton corps est en mode survie. Il faut casser le cycle du stress.
-            <ul>
-                <li><strong>Déconnecte tout</strong> maintenant.</li>
-                <li>Prends un bain chaud ou une douche longue.</li>
-                <li>Ne fais pas de sport intense (HIIT), préfère le Yoga doux ou la marche.</li>
-                <li>Dors au moins 8h cette nuit.</li>
-            </ul>
-        </div>
+        <div id="advice-low" class="stress-advice"><strong>✅ Tout va bien !</strong><br>Profite de ce calme pour faire une activité créative ou planifier tes repas.</div>
+        <div id="advice-mid" class="stress-advice"><strong>⚠️ Zone de turbulence</strong><br>Le cortisol monte. Prends du Magnésium ce soir et fais 5 min de cohérence cardiaque.</div>
+        <div id="advice-high" class="stress-advice"><strong>🚨 Alerte Rouge</strong><br>Déconnecte tout. Bain chaud, sommeil (8h) et pas de sport intense (HIIT) aujourd'hui.</div>
     </div>
 
     <div id="nutrition" class="page">
         <span class="back-btn" onclick="showPage('home')">← Retour Accueil</span>
         <h2>Nutrition & Compléments</h2>
-
         <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&q=80" style="width:100%; height:200px; object-fit:cover; border-radius:15px; margin-bottom:20px;">
-
+        
         <div class="section-card">
             <h3>🥑 L'Assiette Anti-SOPK</h3>
-            <p>L'ennemi n°1, c'est le pic d'insuline. Voici la stratégie :</p>
             <ul style="list-style:none; padding:0;">
-                <li style="margin-bottom:10px;">🛑 <strong>Stop au sucre le matin :</strong> Remplace les céréales par des œufs ou du fromage.</li>
-                <li style="margin-bottom:10px;">🥗 <strong>L'ordre magique :</strong> Mange tes légumes en premier pour tapisser ton estomac de fibres.</li>
-                <li style="margin-bottom:10px;">🍞 <strong>Le bon "habit" :</strong> Ne mange jamais de glucide (pain, fruit) tout seul. Ajoute du gras ou des protéines (amandes, avocat).</li>
+                <li>🛑 <strong>Petit-déj :</strong> Salé, pas sucré ! (Œufs > Céréales)</li>
+                <li>🥗 <strong>Ordre :</strong> Fibres/Légumes en premier.</li>
+                <li>🍞 <strong>Jamais seul :</strong> Glucide + Gras/Protéine toujours.</li>
             </ul>
         </div>
-
         <div class="section-card">
-            <h3>💊 Les Compléments Indispensables</h3>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <div style="background:#f8f9fa; padding:10px; border-radius:10px; border-left:4px solid var(--primary);">
-                    <strong>Myo-Inositol</strong><br>
-                    <small>Pour l'ovulation et la qualité des œufs.</small>
-                </div>
-                <div style="background:#f8f9fa; padding:10px; border-radius:10px; border-left:4px solid var(--accent);">
-                    <strong>Zinc</strong><br>
-                    <small>Contre l'acné et la chute de cheveux.</small>
-                </div>
-                <div style="background:#f8f9fa; padding:10px; border-radius:10px; border-left:4px solid orange;">
-                    <strong>Vitamine D</strong><br>
-                    <small>La base de l'immunité et des hormones.</small>
-                </div>
-                <div style="background:#f8f9fa; padding:10px; border-radius:10px; border-left:4px solid purple;">
-                    <strong>Magnésium</strong><br>
-                    <small>Pour le stress et le sommeil.</small>
-                </div>
-            </div>
+            <h3>💊 Compléments Clés</h3>
+            <p><strong>Myo-Inositol :</strong> Régule l'ovulation.</p>
+            <p><strong>Zinc :</strong> Contre l'acné.</p>
+            <p><strong>Vitamine D :</strong> Immunité.</p>
         </div>
     </div>
 
     <div id="tabac" class="page">
         <span class="back-btn" onclick="showPage('home')">← Retour Accueil</span>
         <h2>Tabac, Cannabis & SOPK</h2>
-        
         <div class="section-card" style="border-left: 5px solid #dc3545;">
-            <h3>🚬 Le Tabac : Un accélérateur de symptômes</h3>
-            <p>Fumer n'est pas anodin, surtout avec un SOPK. Voici pourquoi c'est un cocktail explosif :</p>
-            <ul>
-                <li><strong>Explosion des androgènes :</strong> La cigarette stimule directement la production d'hormones mâles. Résultat : plus de poils, plus d'acné.</li>
-                <li><strong>Graisse abdominale :</strong> Le tabac aggrave la résistance à l'insuline, ce qui favorise le stockage du gras au niveau du ventre.</li>
-                <li><strong>Risque cardiaque :</strong> Les femmes SOPK ont déjà un risque plus élevé. Le tabac multiplie ce danger.</li>
-            </ul>
+            <h3>🚬 Tabac : Le piège</h3>
+            <p>Le tabac stimule directement les androgènes (poils, acné) et augmente le gras abdominal via la résistance à l'insuline.</p>
         </div>
-
         <div class="section-card" style="border-left: 5px solid #198754;">
-            <h3>🌿 Le Cannabis : La fausse bonne idée</h3>
-            <p>On pense souvent que ça détend, mais hormonalement, c'est le chaos :</p>
-            <ul>
-                <li><strong>Ovulation bloquée :</strong> Le THC perturbe l'hypothalamus, le "chef d'orchestre" du cycle. Cela peut stopper net l'ovulation.</li>
-                <li><strong>Hormone Prolactine :</strong> Il peut augmenter cette hormone, ce qui coupe les règles et peut provoquer des écoulements mammaires.</li>
-                <li><strong>Les "Fringales" (Munchies) :</strong> La faim provoquée par le cannabis pousse vers le sucre et le gras. C'est catastrophique pour la résistance à l'insuline.</li>
-            </ul>
-            <p><strong>Alternative :</strong> Le CBD (sans THC) peut aider pour l'anxiété sans les effets hormonaux négatifs.</p>
+            <h3>🌿 Cannabis : Fausse amie</h3>
+            <p>Le THC peut bloquer l'ovulation et augmenter la Prolactine (arrêt des règles). Les "fringales" sont désastreuses pour la glycémie.</p>
         </div>
     </div>
 
     <div id="quiz" class="page">
         <span class="back-btn" onclick="showPage('home')">← Retour Accueil</span>
         <h2>Quiz : Vrai ou Faux ?</h2>
-        
         <div class="section-card">
             <p><strong>1. Le SOPK rend stérile.</strong></p>
-            <button class="quiz-option" onclick="checkAnswer(this, false, 'Faux ! Le SOPK complique l\'ovulation, mais avec une bonne hygiène de vie ou une aide médicale, la grossesse est tout à fait possible.')">Vrai</button>
-            <button class="quiz-option" onclick="checkAnswer(this, true, 'Exact ! C\'est la première cause d\'infertilité, mais elle se soigne très bien. On n\'est pas stérile !')">Faux</button>
+            <button class="quiz-option" onclick="checkAnswer(this, false, 'Faux ! La grossesse est possible avec une bonne hygiène de vie.')">Vrai</button>
+            <button class="quiz-option" onclick="checkAnswer(this, true, 'Exact ! C\'est une cause d\'infertilité, mais pas de stérilité.')">Faux</button>
         </div>
-
         <div class="section-card">
-            <p><strong>2. Il faut supprimer tous les glucides (sucres).</strong></p>
-            <button class="quiz-option" onclick="checkAnswer(this, false, 'Faux ! Il faut choisir les BONS glucides (IG bas) comme les légumineuses ou les céréales complètes, pas les supprimer.')">Vrai</button>
-            <button class="quiz-option" onclick="checkAnswer(this, true, 'Bravo ! On a besoin d\'énergie. Il faut juste éviter le sucre blanc et les produits raffinés.')">Faux</button>
+            <p><strong>2. Il faut supprimer les glucides.</strong></p>
+            <button class="quiz-option" onclick="checkAnswer(this, false, 'Faux ! Il faut choisir les bons (IG bas).')">Vrai</button>
+            <button class="quiz-option" onclick="checkAnswer(this, true, 'Bravo ! On évite juste le sucre raffiné.')">Faux</button>
         </div>
-
-        <div class="section-card">
-            <p><strong>3. La pilule est le seul traitement.</strong></p>
-            <button class="quiz-option" onclick="checkAnswer(this, false, 'C\'est Faux. La pilule masque les symptômes mais ne soigne pas la cause. L\'alimentation et le mode de vie sont les vrais piliers.')">Vrai</button>
-            <button class="quiz-option" onclick="checkAnswer(this, true, 'Exactement. La pilule est un confort, mais l\'hygiène de vie est le vrai traitement de fond.')">Faux</button>
-        </div>
-
-        <div class="section-card" style="background: linear-gradient(135deg, #fff, #ffebf0); border: 2px dashed var(--primary);">
-            <h3 style="text-align:center;">🎯 Ton Challenge de la semaine</h3>
-            <p style="text-align:center;">Prête à passer à l'action ?</p>
+        <div class="section-card" style="background: #fff0f3; border: 2px dashed var(--primary);">
+            <h3 style="text-align:center;">🎯 Challenge Semaine</h3>
             <ul style="font-weight:bold; color:#555;">
-                <li>🔥 30 min de marche rapide tous les jours</li>
-                <li>🥗 Un petit-déjeuner SALÉ pendant 3 jours</li>
-                <li>📵 Pas d'écran 30 min avant de dormir</li>
+                <li>🔥 30 min de marche/jour</li>
+                <li>🥗 Petit-déj SALÉ (3 jours)</li>
             </ul>
         </div>
     </div>
@@ -424,7 +384,23 @@
     </footer>
 
     <script>
-        // --- NAVIGATION ---
+        // --- MENU BURGER LOGIC ---
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            document.getElementById("overlay-bg").style.display = "block";
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.getElementById("overlay-bg").style.display = "none";
+        }
+
+        function navTo(pageId) {
+            closeNav(); // Ferme le menu
+            showPage(pageId); // Change la page
+        }
+
+        // --- NAVIGATION CLASSIQUE ---
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
@@ -433,119 +409,69 @@
 
         // --- DIAGNOSTIC ---
         let diagScore = 0;
-        function setDiag(question, val) {
-            // Simplification : on ajoute juste au score total pour l'instant
-            // Dans une vraie app, on stockerait la réponse par question
+        function setDiag(q, val) {
             if(val === 1) diagScore++;
-            alert("Réponse enregistrée !");
+            alert("Noté !");
         }
         function calculateDiag() {
-            const resultDiv = document.getElementById('diag-result');
-            resultDiv.style.display = 'block';
-            if(diagScore >= 2) {
-                resultDiv.innerHTML = "<h3 style='color:#d63384'>Risque Modéré à Élevé</h3><p>Tes symptômes correspondent à ceux du SOPK. Il est fortement conseillé de consulter un gynécologue pour une échographie et un bilan sanguin.</p>";
-            } else {
-                resultDiv.innerHTML = "<h3 style='color:#20c997'>Risque Faible</h3><p>Tu as peu de symptômes typiques, mais si tu as un doute ou des douleurs, consulte toujours un médecin.</p>";
-            }
-            diagScore = 0; // Reset
+            const r = document.getElementById('diag-result');
+            r.style.display = 'block';
+            if(diagScore >= 2) r.innerHTML = "<h3 style='color:#d63384'>Risque Élevé</h3><p>Symptômes typiques du SOPK. Consulte un gynécologue pour un bilan.</p>";
+            else r.innerHTML = "<h3 style='color:#20c997'>Risque Faible</h3><p>Peu de symptômes, mais reste à l'écoute de ton corps.</p>";
+            diagScore = 0;
         }
 
-        // --- CYCLE TRACKER (LocalStorage) ---
-        function loadCycles() {
-            const cycles = JSON.parse(localStorage.getItem('mysopk_cycles')) || [];
-            return cycles.sort((a, b) => new Date(a) - new Date(b));
-        }
-
+        // --- CYCLE TRACKER ---
+        function loadCycles() { return JSON.parse(localStorage.getItem('mysopk_cycles')) || []; }
         function addCycle() {
-            const dateInput = document.getElementById('cycle-date').value;
-            if(!dateInput) return alert("Choisis une date !");
-            
-            let cycles = loadCycles();
-            if(cycles.includes(dateInput)) return alert("Date déjà enregistrée !");
-            
-            cycles.push(dateInput);
-            localStorage.setItem('mysopk_cycles', JSON.stringify(cycles));
+            const d = document.getElementById('cycle-date').value;
+            if(!d) return alert("Date ?");
+            let c = loadCycles();
+            c.push(d); c.sort();
+            localStorage.setItem('mysopk_cycles', JSON.stringify(c));
             renderCycles();
-            alert("Cycle ajouté !");
+            alert("Ajouté !");
         }
-
         function clearCycles() {
-            if(confirm("Tout effacer ?")) {
-                localStorage.removeItem('mysopk_cycles');
-                renderCycles();
-            }
+            if(confirm("Effacer ?")) { localStorage.removeItem('mysopk_cycles'); renderCycles(); }
         }
-
         function renderCycles() {
-            const cycles = loadCycles();
-            const container = document.getElementById('cycle-graph');
-            container.innerHTML = "";
-
-            if(cycles.length < 2) {
-                container.innerHTML = "<p style='text-align:center;color:#999'>Entre au moins 2 dates de règles pour voir tes durées de cycle.</p>";
-                document.getElementById('avg-cycle').innerText = "-- jours en moyenne";
+            const c = loadCycles().sort((a,b) => new Date(a) - new Date(b)); // S'assurer du tri
+            const cont = document.getElementById('cycle-graph');
+            cont.innerHTML = "";
+            if(c.length < 2) {
+                cont.innerHTML = "<p style='text-align:center;color:#999'>Entre 2 dates pour voir les stats.</p>";
+                document.getElementById('avg-cycle').innerText = "-- j moy.";
                 return;
             }
-
-            let totalDays = 0;
-            let count = 0;
-
-            for(let i = 0; i < cycles.length - 1; i++) {
-                const date1 = new Date(cycles[i]);
-                const date2 = new Date(cycles[i+1]);
-                const diffTime = Math.abs(date2 - date1);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                totalDays += diffDays;
-                count++;
-
-                // Création visuelle barre
-                const row = document.createElement('div');
-                row.className = 'bar-container';
-                
-                // Calcul largeur (Max arbitraire 60 jours pour 100%)
-                let widthPct = (diffDays / 60) * 100;
-                if(widthPct > 100) widthPct = 100;
-
-                row.innerHTML = `
-                    <div class="bar-label">${cycles[i]}</div>
-                    <div class="bar-visual" style="width:${widthPct}%">${diffDays}j</div>
-                `;
-                container.appendChild(row);
+            let total = 0, count = 0;
+            for(let i=0; i<c.length-1; i++) {
+                const diff = Math.ceil(Math.abs(new Date(c[i+1]) - new Date(c[i])) / (86400000));
+                total += diff; count++;
+                let w = (diff/60)*100; if(w>100) w=100;
+                cont.innerHTML += `<div class="bar-container"><div class="bar-label">${c[i]}</div><div class="bar-visual" style="width:${w}%">${diff}j</div></div>`;
             }
-
-            const avg = Math.round(totalDays / count);
-            document.getElementById('avg-cycle').innerText = avg + " jours en moyenne";
+            document.getElementById('avg-cycle').innerText = Math.round(total/count) + " jours moy.";
         }
-
-        // Charger les cycles au démarrage
         renderCycles();
 
-        // --- STRESS MANAGEMENT ---
+        // --- STRESS ---
         function updateStress(val) {
             document.getElementById('stress-val').innerText = val;
-            const emojis = ['😌','🙂','🙂','😐','😐','😟','😟','😩','😩','🤯','🤯'];
-            document.getElementById('emoji-display').innerText = emojis[val];
-
+            const em = ['😌','🙂','🙂','😐','😐','😟','😟','😩','😩','🤯','🤯'];
+            document.getElementById('emoji-display').innerText = em[val];
             document.querySelectorAll('.stress-advice').forEach(d => d.style.display = 'none');
-
             if(val < 4) document.getElementById('advice-low').style.display = 'block';
             else if(val < 8) document.getElementById('advice-mid').style.display = 'block';
             else document.getElementById('advice-high').style.display = 'block';
         }
-        // Init stress
         updateStress(5);
 
-        // --- QUIZ LOGIC ---
-        function checkAnswer(btn, isCorrect, explanation) {
-            if(isCorrect) {
-                btn.classList.add('correct');
-                btn.innerHTML += " ✅";
-            } else {
-                btn.classList.add('wrong');
-                btn.innerHTML += " ❌";
-            }
-            alert(explanation);
+        // --- QUIZ ---
+        function checkAnswer(btn, ok, txt) {
+            if(ok) { btn.classList.add('correct'); btn.innerHTML+=" ✅"; }
+            else { btn.classList.add('wrong'); btn.innerHTML+=" ❌"; }
+            alert(txt);
         }
     </script>
 </body>
